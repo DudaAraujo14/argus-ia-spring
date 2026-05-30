@@ -1,10 +1,18 @@
 package br.com.argus.ia.service;
 
+import br.com.argus.ia.dto.ConsultaResponse;
 import br.com.argus.ia.dto.GerarRelatorioRequest;
+import br.com.argus.ia.rag.RagService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IaService {
+
+    private final RagService ragService;
+
+    public IaService(RagService ragService) {
+        this.ragService = ragService;
+    }
 
     public String gerarRelatorio(GerarRelatorioRequest request) {
         return """
@@ -42,5 +50,21 @@ public class IaService {
                 request.getNumeroBrigadistas(),
                 request.getAcoesTomadas()
         );
+    }
+
+    public ConsultaResponse consultarProcedimento(String pergunta) {
+        String contexto = ragService.buscarContexto(pergunta);
+
+        String resposta = """
+                Resposta do Assistente IA Argus:
+
+                Com base na base de procedimentos carregada, segue a orientação:
+
+                %s
+
+                Observação: este assistente apoia a consulta documental e não substitui a decisão operacional do brigadista ou coordenador responsável.
+                """.formatted(contexto);
+
+        return new ConsultaResponse(resposta, "Base interna de procedimentos Argus MVP");
     }
 }

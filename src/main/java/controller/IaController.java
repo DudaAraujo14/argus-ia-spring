@@ -1,5 +1,7 @@
 package br.com.argus.ia.controller;
 
+import br.com.argus.ia.dto.ConsultaRequest;
+import br.com.argus.ia.dto.ConsultaResponse;
 import br.com.argus.ia.dto.GerarRelatorioRequest;
 import br.com.argus.ia.dto.GerarRelatorioResponse;
 import br.com.argus.ia.service.IaService;
@@ -20,5 +22,10 @@ public class IaController {
     public GerarRelatorioResponse gerarRelatorio(@Valid @RequestBody GerarRelatorioRequest request) {
         String relatorio = iaService.gerarRelatorio(request);
         return new GerarRelatorioResponse(relatorio);
+    }
+
+    @PostMapping("/consultar")
+    public ConsultaResponse consultar(@Valid @RequestBody ConsultaRequest request) {
+        return iaService.consultarProcedimento(request.getPergunta());
     }
 }
