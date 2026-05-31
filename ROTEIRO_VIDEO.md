@@ -12,22 +12,22 @@ Tempo máximo recomendado: 3 minutos.
 
 Olá, meu nome é Maria Eduarda e este é o módulo de Inteligência Artificial do projeto Argus.
 
-O Argus é uma solução voltada ao apoio operacional de brigadistas no combate a incêndios florestais, conectando dados, automação e IA para melhorar a documentação de ocorrências e a consulta a procedimentos.
+O Argus é uma solução voltada ao apoio operacional de brigadistas no combate a incêndios florestais, conectando dados, automação e Inteligência Artificial para melhorar a documentação de ocorrências e a consulta a procedimentos.
 
-Este repositório representa a entrega da disciplina de Disruptive Architectures, com foco em IA Generativa e RAG.
+Este repositório representa a entrega da disciplina de Disruptive Architectures: IoT, IoB & Generative IA, com foco em IA Generativa e RAG.
 
 ---
 
 ## 2. Explicação rápida da proposta - 30 segundos
 
-A IA do Argus não substitui o brigadista e não toma decisões em campo.
+A IA do Argus não substitui o brigadista, não ensina técnicas de combate ao fogo e não toma decisões operacionais em campo.
 
 Ela atua como apoio documental e burocrático, com duas funcionalidades principais:
 
 1. Gerar relatórios técnicos de ocorrência a partir de dados estruturados.
-2. Consultar procedimentos usando uma base de conhecimento interna, em uma abordagem RAG MVP.
+2. Consultar procedimentos usando uma base interna de conhecimento, em uma abordagem RAG.
 
-A ideia é reduzir tempo de documentação e padronizar respostas consultivas.
+A ideia é reduzir o tempo de documentação, padronizar relatórios e apoiar consultas protocolares de forma segura.
 
 ---
 
@@ -35,12 +35,12 @@ A ideia é reduzir tempo de documentação e padronizar respostas consultivas.
 
 Aqui no README temos a arquitetura da solução.
 
-O usuário acessa a API pelo Swagger ou futuramente pelo app mobile.
+O usuário acessa a API pelo Swagger ou futuramente pelo aplicativo mobile.
 
-As requisições chegam no IaController, passam pelo IaService e seguem para duas partes:
+As requisições chegam ao `IaController`, passam pelo `IaService` e seguem para duas frentes:
 
-- geração de relatório técnico;
-- consulta ao RagService, que recupera contexto da base interna.
+- geração de relatório técnico com apoio de IA generativa local via Spring AI e Ollama;
+- consulta ao `RagService`, que recupera contexto da base interna de procedimentos.
 
 A resposta é devolvida em JSON para o usuário.
 
@@ -62,7 +62,7 @@ POST /api/v1/ia/gerar-relatorio
 
 Eu envio dados como localização, tipo de vegetação, tamanho estimado, ações tomadas, recursos utilizados, número de brigadistas e nível de risco.
 
-A API retorna um relatório técnico estruturado.
+A API processa esses dados e retorna um relatório técnico estruturado, com linguagem formal e objetiva.
 
 Agora vou testar a consulta de procedimento:
 
@@ -70,7 +70,7 @@ POST /api/v1/ia/consultar
 
 Com a pergunta: "Qual procedimento em caso de ocorrência com vítima?"
 
-A API busca contexto na base interna e retorna uma resposta orientativa com a fonte utilizada.
+A API recupera contexto na base interna de procedimentos e utiliza o modelo local, via Spring AI e Ollama, para gerar uma resposta orientativa com indicação da fonte utilizada.
 
 ---
 
@@ -78,16 +78,16 @@ A API busca contexto na base interna e retorna uma resposta orientativa com a fo
 
 A API também possui validação.
 
-Se eu enviar uma pergunta vazia, ela retorna erro 400 com mensagem organizada, indicando que o campo é obrigatório.
+Se eu enviar uma pergunta vazia, ela retorna erro 400 com uma mensagem organizada, indicando que o campo é obrigatório.
 
-Isso melhora a qualidade da API e facilita o uso por outros sistemas.
+Isso melhora a qualidade da API, facilita a integração com outros sistemas e evita respostas inconsistentes.
 
 ---
 
 ## 6. Fechamento - 20 segundos
 
-Com isso, o módulo Argus IA entrega um MVP funcional com Spring Boot, Swagger, validação, geração de relatório, consulta RAG em memória e documentação dos prompts.
+Com isso, o módulo Argus IA entrega um projeto funcional com Spring Boot, Swagger, validação, tratamento global de erros, geração de relatório técnico, consulta RAG com base interna, documentação dos prompts e integração com IA generativa local por meio de Spring AI e Ollama.
 
-Como evolução futura, o sistema pode integrar documentos oficiais em PDF, embeddings, vector store e chamada real a modelos generativos via Spring AI.
+A solução evita o uso de chaves externas pagas, mantém a chamada ao modelo no backend e respeita os limites da IA, atuando apenas como apoio documental e consultivo.
 
 Obrigado.
