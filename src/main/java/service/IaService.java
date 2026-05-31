@@ -4,6 +4,7 @@ import br.com.argus.ia.dto.ConsultaResponse;
 import br.com.argus.ia.dto.GerarRelatorioRequest;
 import br.com.argus.ia.rag.RagService;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,11 +20,13 @@ public class IaService {
 
     public String gerarRelatorio(GerarRelatorioRequest request) {
         try {
-            return chatClient
+            String resposta = chatClient
                     .prompt()
+                    .options(ChatOptions.builder()
+                            .temperature(0.1)
+                            .maxTokens(350))
                     .system("""
-                            Você é um redator técnico do sistema Argus, especializado em relatórios
-                            de ocorrências ambientais e incêndios florestais.
+                            Você é um redator técnico do sistema Argus.
 
                             Sua função é transformar dados estruturados em um relatório formal para registro interno.
 
@@ -33,18 +36,17 @@ public class IaService {
                             - Não invente dados que não foram informados.
                             - Não invente data, hora, órgão responsável, protocolo, fonte, citação ou referência bibliográfica.
                             - Não cite IBAMA, ICMBio, INMET, Ministério do Meio Ambiente ou qualquer órgão se isso não estiver nos dados recebidos.
-                            - Não crie classificação adicional além do nível de risco informado.
                             - Não use markdown.
                             - Não use asteriscos.
                             - Não coloque seção de referências.
-                            - Não coloque fontes no final.
                             - Use linguagem técnica, objetiva e impessoal.
                             - Escreva em português do Brasil.
-                            - Organize a resposta exatamente nas seções solicitadas pelo usuário.
                             """)
                     .user(montarPromptRelatorio(request))
                     .call()
                     .content();
+
+            return limparResposta(resposta);
 
         } catch (Exception exception) {
             return gerarRelatorioFallback(request);
@@ -57,13 +59,14 @@ public class IaService {
         try {
             String resposta = chatClient
                     .prompt()
+                    .options(ChatOptions.builder()
+                            .temperature(0.1)
+                            .maxTokens(300))
                     .system("""
                             Você é um assistente de procedimentos do sistema Argus,
                             voltado para apoio documental a brigadistas e coordenadores.
 
                             Use apenas o contexto fornecido para responder.
-                            Se o contexto não tiver informação suficiente, diga claramente
-                            que não há dados suficientes na base carregada.
 
                             Regras obrigatórias:
                             - Não invente protocolos.
@@ -86,11 +89,15 @@ public class IaService {
                             %s
 
                             Responda apenas com base no contexto recuperado.
+                            Se o contexto indicar ausência de informação suficiente, informe isso claramente.
                             """.formatted(contexto, pergunta))
                     .call()
                     .content();
 
-            return new ConsultaResponse(resposta, "Base interna de procedimentos Argus + Spring AI Ollama");
+            return new ConsultaResponse(
+                    limparResposta(resposta),
+                    "Base interna de procedimentos Argus + Spring AI Ollama"
+            );
 
         } catch (Exception exception) {
             String respostaFallback = """
@@ -104,54 +111,38 @@ public class IaService {
                     Observação: este assistente apoia a consulta documental e não substitui a decisão operacional do brigadista ou coordenador responsável.
                     """.formatted(contexto);
 
-            return new ConsultaResponse(respostaFallback, "Fallback local por indisponibilidade do Ollama");
+            return new ConsultaResponse(
+                    limparResposta(respostaFallback),
+                    "Fallback local por indisponibilidade do Ollama"
+            );
         }
     }
 
     private String montarPromptRelatorio(GerarRelatorioRequest request) {
         return """
-                Gere um relatório técnico formal de ocorrência de incêndio florestal com base exclusivamente nos dados abaixo.
+                Gere um relatório técnico curto para registro interno usando exclusivamente estes dados:
 
-                Dados estruturados da ocorrência:
+                Localização: %s
+                Tipo de vegetação: %s
+                Área estimada: %s
+                Ações tomadas: %s
+                Recursos utilizados: %s
+                Brigadistas envolvidos: %d
+                Nível de risco: %s
 
-                - Localização: %s
-                - Tipo de vegetação: %s
-                - Tamanho estimado da área atingida: %s
-                - Ações tomadas: %s
-                - Recursos utilizados: %s
-                - Número de brigadistas envolvidos: %d
-                - Nível de risco: %s
-
-                Regras obrigatórias:
-                - Não invente data.
-                - Não invente hora.
-                - Não invente órgão responsável.
-                - Não invente protocolo.
-                - Não invente fonte.
-                - Não invente citação.
-                - Não invente referência bibliográfica.
-                - Não cite IBAMA, ICMBio, INMET, Ministério do Meio Ambiente ou qualquer órgão se isso não estiver nos dados recebidos.
-                - Não crie informações não fornecidas pelo usuário.
-                - Não ensine técnicas de combate ao fogo.
-                - Não dê ordens operacionais.
+                Regras:
+                - Não invente data, hora, órgão, fonte, protocolo ou referência.
+                - Não ensine combate ao fogo.
                 - Não use markdown.
-                - Não use asteriscos.
-                - Não coloque seção de referências.
-                - Não coloque fontes no final.
-                - Não inclua observações que não estejam baseadas nos dados recebidos.
-                - Use linguagem técnica, objetiva e impessoal.
-                - Escreva em português do Brasil.
+                - Escreva em português formal e impessoal.
 
-                Estruture o relatório exatamente com estas seções:
-
+                Use exatamente estas seções:
                 1. Identificação da ocorrência
                 2. Caracterização da área atingida
                 3. Recursos empregados
                 4. Ações registradas
                 5. Avaliação do nível de risco
                 6. Considerações finais
-
-                O relatório deve ser curto, formal e adequado para registro interno.
                 """.formatted(
                 request.getLocalizacao(),
                 request.getTipoVegetacao(),
@@ -213,5 +204,18 @@ public class IaService {
                 request.getAcoesTomadas(),
                 request.getNivelRisco()
         );
+    }
+
+    private String limparResposta(String resposta) {
+        if (resposta == null) {
+            return "";
+        }
+
+        return resposta
+                .replace("**", "")
+                .replace("*", "")
+                .replace("#", "")
+                .replace("`", "")
+                .trim();
     }
 }
