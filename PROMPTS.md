@@ -79,5 +79,5 @@ Uma resposta clara, objetiva e com indicação da fonte/contexto utilizado.
 - A IA não substitui protocolos oficiais completos.
 - A IA não deve tomar decisões críticas em campo.
 - A IA atua como apoio documental e burocrático.
-- A versão atual usa uma base de conhecimento MVP em memória.
+- A versão atual usa uma base de conhecimento em memória.
 - Em versões futuras, o sistema pode evoluir para RAG com documentos oficiais em PDF, embeddings e vector store.

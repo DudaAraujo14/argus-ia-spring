@@ -17,7 +17,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>argus-ia-spring</name>
-	<description>Assistente de IA do projeto Argus para geração de relatórios e consulta RAG</description>
+	<description>Assistente de IA do projeto Argus com Spring AI e Ollama para geração de relatórios e consulta RAG</description>
 
 	<properties>
 		<java.version>17</java.version>
@@ -27,6 +27,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Spring AI BOM -->
 			<dependency>
 				<groupId>org.springframework.ai</groupId>
 				<artifactId>spring-ai-bom</artifactId>
@@ -82,10 +83,10 @@
 			<version>3.0.2</version>
 		</dependency>
 
-		<!-- Spring AI com OpenAI -->
+		<!-- Spring AI com Ollama local -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-openai</artifactId>
+			<artifactId>spring-ai-starter-model-ollama</artifactId>
 		</dependency>
 
 		<!-- DevTools para desenvolvimento -->

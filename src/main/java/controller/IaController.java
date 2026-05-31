@@ -39,10 +39,10 @@ public class IaController {
 
     @PostMapping("/consultar")
     @Operation(
-            summary = "Consultar procedimentos operacionais com RAG MVP",
+            summary = "Consultar procedimentos operacionais com RAG",
             description = """
                     Recebe uma pergunta do usuário e busca contexto em uma base interna de procedimentos.
-                    Esta versão utiliza uma base MVP em memória para demonstrar o conceito de RAG.
+                    Esta versão utiliza uma base em memória para demonstrar o conceito de RAG.
                     """
     )
     public ConsultaResponse consultar(@Valid @RequestBody ConsultaRequest request) {

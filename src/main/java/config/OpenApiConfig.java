@@ -20,7 +20,7 @@ public class OpenApiConfig {
 
                                 Esta API oferece funcionalidades de apoio documental para brigadistas e coordenadores,
                                 incluindo geração de relatórios técnicos de ocorrências e consulta a procedimentos
-                                operacionais por meio de uma abordagem RAG MVP.
+                                operacionais por meio de uma abordagem RAG.
 
                                 A IA atua como apoio burocrático e consultivo, sem substituir treinamento profissional
                                 ou decisão operacional em campo.

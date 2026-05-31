@@ -13,7 +13,7 @@ public class ConsultaResponse {
 
     @Schema(
             description = "Fonte utilizada para compor a resposta",
-            example = "Base interna de procedimentos Argus MVP"
+            example = "Base interna de procedimentos Argus"
     )
     private String fonte;
 
