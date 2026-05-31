@@ -93,7 +93,7 @@ public class IaService {
 
                 1. Identificação da ocorrência
 
-                Foi registrada uma ocorrência de incêndio florestal em %s.
+                Foi registrada uma ocorrência de incêndio florestal na localidade: %s.
 
                 2. Caracterização da área atingida
 
@@ -109,7 +109,7 @@ public class IaService {
 
                 5. Avaliação do nível de risco
 
-                O nível de risco informado para a ocorrência foi %s.
+                O nível de risco informado para a ocorrência foi classificado como %s.
 
                 6. Considerações finais
 
