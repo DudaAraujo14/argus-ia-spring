@@ -2,24 +2,67 @@ package br.com.argus.ia.service;
 
 import br.com.argus.ia.dto.ConsultaResponse;
 import br.com.argus.ia.dto.GerarRelatorioRequest;
+import br.com.argus.ia.dto.GerarRelatorioResponse;
+import br.com.argus.ia.dto.RelatorioReemitidoResponse;
+import br.com.argus.ia.model.RelatorioOcorrencia;
 import br.com.argus.ia.rag.RagService;
+import br.com.argus.ia.repository.RelatorioOcorrenciaRepository;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class IaService {
 
     private final RagService ragService;
     private final ChatClient chatClient;
+    private final RelatorioOcorrenciaRepository relatorioRepository;
 
-    public IaService(RagService ragService, ChatClient.Builder chatClientBuilder) {
+    public IaService(
+            RagService ragService,
+            ChatClient.Builder chatClientBuilder,
+            RelatorioOcorrenciaRepository relatorioRepository
+    ) {
         this.ragService = ragService;
         this.chatClient = chatClientBuilder.build();
+        this.relatorioRepository = relatorioRepository;
     }
 
-    public String gerarRelatorio(GerarRelatorioRequest request) {
-        return gerarRelatorioEstruturado(request);
+    public GerarRelatorioResponse gerarRelatorio(GerarRelatorioRequest request) {
+        String textoRelatorio = gerarRelatorioEstruturado(request);
+
+        RelatorioOcorrencia relatorio = new RelatorioOcorrencia(
+                request.getLocalizacao(),
+                request.getTipoVegetacao(),
+                request.getTamanhoEstimado(),
+                request.getAcoesTomadas(),
+                request.getRecursosUtilizados(),
+                request.getNumeroBrigadistas(),
+                request.getNivelRisco(),
+                textoRelatorio,
+                LocalDateTime.now()
+        );
+
+        RelatorioOcorrencia salvo = relatorioRepository.save(relatorio);
+
+        return new GerarRelatorioResponse(salvo.getId(), salvo.getRelatorio());
+    }
+
+    public RelatorioReemitidoResponse reemitirRelatorio(Long id) {
+        RelatorioOcorrencia relatorio = relatorioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Relatório não encontrado com o ID: " + id));
+
+        return new RelatorioReemitidoResponse(
+                relatorio.getId(),
+                relatorio.getLocalizacao(),
+                relatorio.getTipoVegetacao(),
+                relatorio.getTamanhoEstimado(),
+                relatorio.getNivelRisco(),
+                relatorio.getRelatorio(),
+                relatorio.getCriadoEm()
+        );
     }
 
     public ConsultaResponse consultarProcedimento(String pergunta) {

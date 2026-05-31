@@ -2,8 +2,11 @@ package br.com.argus.ia.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "Resposta contendo o relatório técnico gerado.")
+@Schema(description = "Resposta contendo o relatório técnico gerado e salvo.")
 public class GerarRelatorioResponse {
+
+    @Schema(description = "Identificador do relatório salvo no banco de dados", example = "1")
+    private Long id;
 
     @Schema(
             description = "Relatório técnico formal gerado pela aplicação",
@@ -14,12 +17,21 @@ public class GerarRelatorioResponse {
     public GerarRelatorioResponse() {
     }
 
-    public GerarRelatorioResponse(String relatorio) {
+    public GerarRelatorioResponse(Long id, String relatorio) {
+        this.id = id;
         this.relatorio = relatorio;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getRelatorio() {
         return relatorio;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setRelatorio(String relatorio) {
