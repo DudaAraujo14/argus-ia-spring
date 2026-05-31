@@ -25,15 +25,22 @@ public class IaService {
                             Você é um redator técnico do sistema Argus, especializado em relatórios
                             de ocorrências ambientais e incêndios florestais.
 
-                            Sua função é transformar dados estruturados em um relatório formal.
+                            Sua função é transformar dados estruturados em um relatório formal para registro interno.
 
                             Regras obrigatórias:
                             - Não ensine o brigadista a combater incêndio.
                             - Não substitua decisão operacional em campo.
                             - Não invente dados que não foram informados.
+                            - Não invente data, hora, órgão responsável, protocolo, fonte, citação ou referência bibliográfica.
+                            - Não cite IBAMA, ICMBio, INMET, Ministério do Meio Ambiente ou qualquer órgão se isso não estiver nos dados recebidos.
+                            - Não crie classificação adicional além do nível de risco informado.
+                            - Não use markdown.
+                            - Não use asteriscos.
+                            - Não coloque seção de referências.
+                            - Não coloque fontes no final.
                             - Use linguagem técnica, objetiva e impessoal.
                             - Escreva em português do Brasil.
-                            - Organize a resposta em seções.
+                            - Organize a resposta exatamente nas seções solicitadas pelo usuário.
                             """)
                     .user(montarPromptRelatorio(request))
                     .call()
@@ -60,11 +67,14 @@ public class IaService {
 
                             Regras obrigatórias:
                             - Não invente protocolos.
+                            - Não invente órgãos, normas, fontes ou referências.
                             - Não ensine técnicas de combate ao fogo.
                             - Não substitua treinamento profissional.
                             - Não substitua decisão operacional em campo.
                             - Responda em português do Brasil.
-                            - Seja objetivo e seguro.
+                            - Seja objetivo, técnico e seguro.
+                            - Não use markdown.
+                            - Não use asteriscos.
                             """)
                     .user("""
                             Contexto recuperado da base de conhecimento:
@@ -74,6 +84,8 @@ public class IaService {
                             Pergunta do usuário:
 
                             %s
+
+                            Responda apenas com base no contexto recuperado.
                             """.formatted(contexto, pergunta))
                     .call()
                     .content();
@@ -98,7 +110,7 @@ public class IaService {
 
     private String montarPromptRelatorio(GerarRelatorioRequest request) {
         return """
-                Gere um relatório técnico formal de ocorrência de incêndio florestal com base nos dados abaixo.
+                Gere um relatório técnico formal de ocorrência de incêndio florestal com base exclusivamente nos dados abaixo.
 
                 Dados estruturados da ocorrência:
 
@@ -110,15 +122,36 @@ public class IaService {
                 - Número de brigadistas envolvidos: %d
                 - Nível de risco: %s
 
-                Estruture o relatório com:
+                Regras obrigatórias:
+                - Não invente data.
+                - Não invente hora.
+                - Não invente órgão responsável.
+                - Não invente protocolo.
+                - Não invente fonte.
+                - Não invente citação.
+                - Não invente referência bibliográfica.
+                - Não cite IBAMA, ICMBio, INMET, Ministério do Meio Ambiente ou qualquer órgão se isso não estiver nos dados recebidos.
+                - Não crie informações não fornecidas pelo usuário.
+                - Não ensine técnicas de combate ao fogo.
+                - Não dê ordens operacionais.
+                - Não use markdown.
+                - Não use asteriscos.
+                - Não coloque seção de referências.
+                - Não coloque fontes no final.
+                - Não inclua observações que não estejam baseadas nos dados recebidos.
+                - Use linguagem técnica, objetiva e impessoal.
+                - Escreva em português do Brasil.
+
+                Estruture o relatório exatamente com estas seções:
+
                 1. Identificação da ocorrência
-                2. Caracterização da área
+                2. Caracterização da área atingida
                 3. Recursos empregados
                 4. Ações registradas
                 5. Avaliação do nível de risco
                 6. Considerações finais
 
-                Não invente informações além das fornecidas.
+                O relatório deve ser curto, formal e adequado para registro interno.
                 """.formatted(
                 request.getLocalizacao(),
                 request.getTipoVegetacao(),
@@ -134,30 +167,40 @@ public class IaService {
         return """
                 RELATÓRIO TÉCNICO DE OCORRÊNCIA - ARGUS
 
-                1. Localização da ocorrência:
+                1. Identificação da ocorrência
+
+                Foi registrada ocorrência de incêndio florestal na seguinte localização:
                 %s
 
-                2. Tipo de vegetação afetada:
+                2. Caracterização da área atingida
+
+                A área atingida apresenta o seguinte tipo de vegetação:
                 %s
 
-                3. Tamanho estimado da área atingida:
+                O tamanho estimado da área atingida foi informado como:
                 %s
 
-                4. Nível de risco:
+                3. Recursos empregados
+
+                Foram utilizados os seguintes recursos:
                 %s
 
-                5. Recursos utilizados:
+                A equipe mobilizada contou com a atuação de %d brigadista(s).
+
+                4. Ações registradas
+
+                As ações tomadas durante a ocorrência foram:
                 %s
 
-                6. Equipe mobilizada:
-                A ocorrência contou com a atuação de %d brigadista(s).
+                5. Avaliação do nível de risco
 
-                7. Ações tomadas:
+                O nível de risco informado para a ocorrência foi:
                 %s
 
-                8. Considerações finais:
-                A ocorrência foi registrada no sistema Argus para fins de acompanhamento,
-                documentação técnica e apoio à tomada de decisão pelos responsáveis operacionais.
+                6. Considerações finais
+
+                A ocorrência foi registrada para fins de documentação técnica, acompanhamento operacional
+                e apoio aos responsáveis pela gestão da situação.
 
                 Observação técnica:
                 Este relatório foi gerado pelo fallback local porque o modelo local não respondeu.
@@ -165,10 +208,10 @@ public class IaService {
                 request.getLocalizacao(),
                 request.getTipoVegetacao(),
                 request.getTamanhoEstimado(),
-                request.getNivelRisco(),
                 request.getRecursosUtilizados(),
                 request.getNumeroBrigadistas(),
-                request.getAcoesTomadas()
+                request.getAcoesTomadas(),
+                request.getNivelRisco()
         );
     }
 }
