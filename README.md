@@ -35,17 +35,11 @@ A solução foi construída com **Spring Boot**, **Spring AI**, **Ollama** e **O
 
 ## Links do Projeto
 
-> Preencha os links abaixo antes da entrega final.
-
-- **Repositório GitHub:** `COLE_AQUI_O_LINK_DO_REPOSITORIO`
-- **Swagger UI:** `COLE_AQUI_O_LINK_DO_SWAGGER`
-- **Health Check:** `COLE_AQUI_O_LINK_DO_HEALTH`
-- **Vídeo de Demonstração (YouTube não listado):** `COLE_AQUI_O_LINK_DO_VIDEO`
-
-Exemplo local:
-
-- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
-- Health Check: `http://localhost:8080/api/v1/ia/health`
+- **Repositório GitHub:** `https://github.com/DudaAraujo14/argus-ia-spring.git`
+- **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
+- **Health Check:** `http://localhost:8080/api/v1/ia/health`
+- **Status Visual:** `http://localhost:8080/status`
+- **Vídeo de Demonstração (YouTube não listado):** ``
 
 ---
 
@@ -112,6 +106,16 @@ GET /api/v1/ia/health
 
 ---
 
+### 3.1.1 Página Visual de Status
+
+Exibe uma página visual para apresentação do estado da aplicação, com informações sobre backend, IA local, banco de dados e recursos disponíveis.
+
+```http
+GET /status
+```
+
+---
+
 ### 3.2 Gerar Relatório Técnico
 
 Recebe dados estruturados da ocorrência e gera um relatório técnico formal.
@@ -142,6 +146,21 @@ GET /api/v1/ia/relatorios/{id}
 
 ---
 
+### 3.3.1 Exportar Relatório em PDF
+
+Permite baixar um relatório salvo no Oracle em formato PDF, facilitando arquivamento, compartilhamento e apresentação documental.
+
+```http
+GET /api/v1/ia/relatorios/{id}/pdf
+```
+
+**Resultado:**
+- arquivo PDF gerado a partir do relatório salvo;
+- download com nome padronizado;
+- exportação documental para uso externo.
+
+---
+
 ### 3.4 Consultar Procedimentos com IA + RAG
 
 Recebe uma pergunta e utiliza a base interna de conhecimento para recuperar contexto. Em seguida, o modelo local via Ollama gera uma resposta orientativa.
@@ -163,18 +182,23 @@ POST /api/v1/ia/consultar
 
 ```mermaid
 flowchart LR
-    U[Usuário / Swagger / App Cliente] --> C[Controllers REST]
+    U[Usuário / Swagger / Status Page / App Cliente] --> C[Controllers REST]
     C --> S[IaService]
+    C --> ST[StatusController]
     S --> R1[Gerador Estruturado de Relatório]
     S --> R2[RagService]
+    S --> PDF[PdfService]
     R2 --> KB[Base de Conhecimento Interna]
     R2 --> AI[Spring AI + ChatClient]
     AI --> O[Ollama - llama3.2:1b]
     R1 --> DB[(Oracle Database)]
     S --> DB
     DB --> S
-    S --> RESP[DTOs de Resposta JSON]
+    PDF --> ARQ[Arquivo PDF]
+    S --> RESP[DTOs de Resposta JSON / PDF]
+    ST --> PAGE[Página Visual de Status]
     RESP --> U
+    PAGE --> U
 ```
 
 ---
@@ -216,9 +240,11 @@ flowchart TD
 | Componente | Responsabilidade |
 |---|---|
 | `HealthController` | Verificação de disponibilidade da API |
+| `StatusController` | Página visual de status da aplicação |
 | `IaController` | Exposição dos endpoints de IA |
-| `IaService` | Orquestra geração, consulta e reemissão |
+| `IaService` | Orquestra geração, consulta, reemissão e exportação em PDF |
 | `RagService` | Recuperação de contexto da base interna |
+| `PdfService` | Geração de PDF a partir de relatório salvo |
 | `RelatorioOcorrenciaRepository` | Persistência e consulta dos relatórios |
 | `RelatorioOcorrencia` | Entidade JPA mapeada no Oracle |
 | `ChatClient` | Integração do Spring AI com o modelo local |
@@ -249,6 +275,13 @@ sequenceDiagram
     DB-->>S: RelatorioOcorrencia
     S-->>API: RelatorioReemitidoResponse
     API-->>U: JSON com dados salvos
+
+    U->>API: GET /api/v1/ia/relatorios/{id}/pdf
+    API->>S: exportarRelatorioPdf(id)
+    S->>DB: findById(id)
+    DB-->>S: RelatorioOcorrencia
+    S-->>API: byte[] PDF
+    API-->>U: download relatorio-argus-{id}.pdf
 ```
 
 ---
@@ -294,7 +327,20 @@ sequenceDiagram
 2. O `IaService` consulta o Oracle.
 3. O sistema retorna o relatório persistido e seus dados principais.
 
-### 5.3 Fluxo de consulta com IA
+### 5.3 Fluxo de exportação em PDF
+
+1. O usuário informa o `id` do relatório salvo.
+2. O `IaService` busca o registro no Oracle.
+3. O `PdfService` gera o arquivo PDF em memória.
+4. O controller retorna o arquivo para download.
+
+### 5.4 Fluxo de página de status
+
+1. O usuário acessa `/status`.
+2. O `StatusController` retorna uma página HTML visual.
+3. A página apresenta o estado da aplicação, recursos disponíveis e links úteis.
+
+### 5.5 Fluxo de consulta com IA
 
 1. O usuário envia uma pergunta.
 2. O `RagService` recupera o contexto da base interna.
@@ -314,6 +360,7 @@ sequenceDiagram
 | ![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-000000?style=flat-square&logo=ollama&logoColor=white) | Execução local do modelo generativo |
 | ![Oracle](https://img.shields.io/badge/Oracle-Database-F80000?style=flat-square&logo=oracle&logoColor=white) | Persistência dos relatórios |
 | ![JPA](https://img.shields.io/badge/Spring_Data_JPA-Persistence-59666C?style=flat-square) | Acesso a dados e mapeamento ORM |
+| ![OpenPDF](https://img.shields.io/badge/OpenPDF-PDF_Generation-CC0000?style=flat-square) | Exportação dos relatórios em PDF |
 | ![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=flat-square&logo=swagger&logoColor=black) | Documentação e teste da API |
 | ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=flat-square&logo=apachemaven&logoColor=white) | Gerenciamento de dependências |
 | ![Git](https://img.shields.io/badge/Git-Versionamento-F05032?style=flat-square&logo=git&logoColor=white) | Controle de versão |
@@ -327,10 +374,12 @@ sequenceDiagram
 src/main/java/br/com/argus/ia
 ├── controller
 │   ├── HealthController.java
-│   └── IaController.java
+│   ├── IaController.java
+│   └── StatusController.java
 ├── dto
 │   ├── ConsultaRequest.java
 │   ├── ConsultaResponse.java
+│   ├── HealthResponse.java
 │   ├── GerarRelatorioRequest.java
 │   ├── GerarRelatorioResponse.java
 │   └── RelatorioReemitidoResponse.java
@@ -344,7 +393,8 @@ src/main/java/br/com/argus/ia
 ├── repository
 │   └── RelatorioOcorrenciaRepository.java
 ├── service
-│   └── IaService.java
+│   ├── IaService.java
+│   └── PdfService.java
 └── ArgusIaSpringApplication.java
 
 src/main/resources
@@ -358,8 +408,10 @@ src/main/resources
 | Método | Endpoint | Objetivo |
 |---|---|---|
 | `GET` | `/api/v1/ia/health` | Verificar se a API está disponível |
+| `GET` | `/status` | Exibir página visual de status da aplicação |
 | `POST` | `/api/v1/ia/gerar-relatorio` | Gerar e salvar relatório técnico |
 | `GET` | `/api/v1/ia/relatorios/{id}` | Reemitir relatório salvo no Oracle |
+| `GET` | `/api/v1/ia/relatorios/{id}/pdf` | Exportar relatório salvo em PDF |
 | `POST` | `/api/v1/ia/consultar` | Consultar procedimentos com IA + RAG |
 
 ### Exemplo — gerar relatório
@@ -408,6 +460,28 @@ GET /api/v1/ia/relatorios/1
   "criadoEm": "2026-06-01T10:30:00"
 }
 ```
+
+### Exemplo — exportar relatório em PDF
+
+**Request**
+
+```http
+GET /api/v1/ia/relatorios/1/pdf
+```
+
+**Response**
+
+```txt
+Download do arquivo relatorio-argus-1.pdf
+```
+
+### Exemplo — página visual de status
+
+```http
+GET /status
+```
+
+A página visual apresenta status da aplicação, backend, IA local, banco de dados e links úteis da API.
 
 ### Exemplo — consulta de procedimento
 
@@ -480,7 +554,7 @@ Essa camada mostra que o projeto não apenas gera a informação, mas também:
 
 ```bash
 # 1. Clonar o repositório
-git clone COLE_AQUI_O_LINK_DO_REPOSITORIO
+git clone https://github.com/DudaAraujo14/argus-ia-spring.git
 
 # 2. Entrar na pasta do projeto
 cd argus-ia-spring
@@ -499,6 +573,7 @@ Depois, acessar:
 
 - Swagger: `http://localhost:8080/swagger-ui/index.html`
 - Health: `http://localhost:8080/api/v1/ia/health`
+- Status Visual: `http://localhost:8080/status`
 
 ---
 
@@ -602,6 +677,7 @@ O projeto já contempla:
 - validação de entrada com Bean Validation;
 - tratamento global de erros;
 - documentação Swagger/OpenAPI;
+- página visual de status da aplicação;
 - persistência real em banco relacional;
 - separação em camadas;
 - uso real de IA generativa local;
@@ -612,18 +688,6 @@ Arquivos complementares relevantes:
 - `PROMPTS.md`
 - `AVALIACAO_IA.md`
 - `ROTEIRO_VIDEO.md`
-
----
-
-## 17. Evoluções Futuras
-
-- integração com PDFs oficiais e RAG completo;
-- exportação do relatório em PDF;
-- autenticação de usuários;
-- listagem paginada de relatórios salvos;
-- dashboard de ocorrências;
-- integração com app mobile do ecossistema Argus;
-- inclusão de análise preditiva de risco a partir de dados ambientais.
 
 ---
 
@@ -639,13 +703,14 @@ Arquivos complementares relevantes:
 - documentação dos prompts;
 - casos de uso bem definidos;
 - tratamento de erros e validação;
-- demonstração prática via Swagger;
+- demonstração prática via Swagger e página visual de status;
 - projeto alinhado ao problema real da Global Solution.
 
 ### Destaques do projeto
 
 - IA executando localmente via Ollama;
 - reemissão de relatório salvo via `GET`;
+- exportação de relatório salvo em PDF;
 - arquitetura organizada e compreensível para banca técnica;
 - solução honesta, funcional e defensável.
 
@@ -653,24 +718,27 @@ Arquivos complementares relevantes:
 
 ## 19. Integrantes
 
-> Preencha com os dados oficiais do grupo.
-
-- **Nome 1** — RM XXXXX
-- **Nome 2** — RM XXXXX
-- **Maria Eduarda** — RM XXXXX
+| Integrante | RM | Turma |
+|---|---|---|
+| **Maria Eduarda Araujo Penas** | RM560944 | B |
+| **Alane Rocha da Sila** | RM561052 |  |
+| **Anna Beatriz de Araujo Bonfim** | RM559561 |  |
 
 ---
 
 ## Demonstração em Vídeo
 
+- **Link do vídeo:** ``
+
 O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
 
 1. visão geral do README e da arquitetura;
-2. health check;
+2. página visual de status e health check;
 3. geração de relatório com retorno do `id`;
 4. reemissão do relatório salvo;
-5. consulta de procedimento com IA + RAG;
-6. explicação do uso do Oracle e do Ollama.
+5. exportação do relatório em PDF;
+6. consulta de procedimento com IA + RAG;
+7. explicação do uso do Oracle e do Ollama.
 
 ---
 
@@ -685,6 +753,8 @@ O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
 - [x] Geração de relatório técnico
 - [x] Persistência no Oracle Database
 - [x] Reemissão de relatório por `GET`
+- [x] Exportação de relatório em PDF
+- [x] Página visual de status da aplicação
 - [x] Consulta procedimental com Spring AI + Ollama
 - [x] Estrutura RAG inicial
 - [x] Tratamento de erros
@@ -695,5 +765,3 @@ O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
 ## Licença
 
 Projeto acadêmico desenvolvido para a **FIAP - Global Solution 2026/1**.
-
-Uso educacional.
