@@ -718,11 +718,11 @@ Arquivos complementares relevantes:
 
 ## 19. Integrantes
 
-| Integrante | RM | Turma |
+| Integrante | RM | 
 |---|---|---|
-| **Maria Eduarda Araujo Penas** | RM560944 | B |
-| **Alane Rocha da Sila** | RM561052 |  |
-| **Anna Beatriz de Araujo Bonfim** | RM559561 |  |
+| **Maria Eduarda Araujo Penas** | RM560944 |
+| **Alane Rocha da Sila** | RM561052 |
+| **Anna Beatriz de Araujo Bonfim** | RM559561 |
 
 ---
 
