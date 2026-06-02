@@ -1,435 +1,370 @@
 # Argus IA Spring
 
-![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0.6-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![Spring AI](https://img.shields.io/badge/Spring%20AI-Generative%20AI-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
-![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-000000?style=for-the-badge&logo=ollama&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
-![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
-![Git](https://img.shields.io/badge/Git-Versionamento-F05032?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-Reposit%C3%B3rio-181717?style=for-the-badge&logo=github&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Projeto%20Funcional-success?style=for-the-badge)
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17" />
+  <img src="https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/Spring_AI-Ollama-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring AI" />
+  <img src="https://img.shields.io/badge/Ollama-llama3.2%3A1b-000000?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama" />
+  <img src="https://img.shields.io/badge/Oracle_Database-Relational_DB-F80000?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Database" />
+  <img src="https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" />
+  <img src="https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven" />
+  <img src="https://img.shields.io/badge/Status-Funcional-success?style=for-the-badge" alt="Status" />
+</p>
 
-Assistente de Inteligência Artificial do projeto **Argus**, desenvolvido para a **Global Solution 2026/1 - FIAP**.
+<p align="center">
+  <strong>Módulo de Inteligência Artificial do projeto Argus</strong><br/>
+  Global Solution 2026/1 · FIAP · Disruptive Architectures: IoT, IoB & Generative IA
+</p>
 
-O Argus é uma solução voltada ao apoio operacional de brigadistas e coordenadores no combate a incêndios florestais. A proposta conecta dados, automação, APIs e Inteligência Artificial para melhorar a documentação de ocorrências, padronizar relatórios técnicos e apoiar consultas a procedimentos operacionais.
+---
 
-Este módulo utiliza **Spring Boot**, **Spring AI** e **Ollama** para executar um modelo generativo local, sem uso de OpenAI, sem chave de API externa e sem cobrança por requisição.
+## Visão Geral
+
+O **Argus IA Spring** é o módulo de Inteligência Artificial do ecossistema **Argus**, desenvolvido para apoiar brigadistas e coordenadores no **registro de ocorrências ambientais** e na **consulta de procedimentos operacionais**.
+
+A solução foi construída com **Spring Boot**, **Spring AI**, **Ollama** e **Oracle Database**, combinando:
+
+- **IA generativa local** para apoio consultivo;
+- **persistência relacional** para armazenar e reemitir relatórios;
+- **API REST documentada com Swagger**;
+- **estrutura preparada para evolução de RAG**.
+
+> **Posicionamento do produto:** a IA do Argus **não substitui o brigadista**, não ensina combate ao fogo e não toma decisões críticas em campo. Seu papel é **apoiar documentação, padronização e consulta protocolar**.
+
+---
+
+## Links do Projeto
+
+> Preencha os links abaixo antes da entrega final.
+
+- **Repositório GitHub:** `COLE_AQUI_O_LINK_DO_REPOSITORIO`
+- **Swagger UI:** `COLE_AQUI_O_LINK_DO_SWAGGER`
+- **Health Check:** `COLE_AQUI_O_LINK_DO_HEALTH`
+- **Vídeo de Demonstração (YouTube não listado):** `COLE_AQUI_O_LINK_DO_VIDEO`
+
+Exemplo local:
+
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- Health Check: `http://localhost:8080/api/v1/ia/health`
 
 ---
 
 ## Sumário
 
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Contexto da Global Solution](#contexto-da-global-solution)
-- [Objetivo da Inteligência Artificial](#objetivo-da-inteligência-artificial)
-- [Funcionalidades](#funcionalidades)
-- [Arquitetura da Solução](#arquitetura-da-solução)
-- [Fluxo de Funcionamento](#fluxo-de-funcionamento)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Estrutura do Projeto](#estrutura-do-projeto)
-- [Endpoints da API](#endpoints-da-api)
-- [Como Executar o Projeto](#como-executar-o-projeto)
-- [Configuração do Ollama](#configuração-do-ollama)
-- [Documentação dos Prompts](#documentação-dos-prompts)
-- [Base de Conhecimento RAG](#base-de-conhecimento-rag)
-- [Limitações da Solução](#limitações-da-solução)
-- [Evoluções Futuras](#evoluções-futuras)
-- [Critérios Atendidos na Entrega de IA](#critérios-atendidos-na-entrega-de-ia)
-- [Integrantes](#integrantes)
-- [Vídeo de Demonstração](#vídeo-de-demonstração)
-- [Status do Projeto](#status-do-projeto)
-- [Licença](#licença)
+- [1. Objetivo da Solução](#1-objetivo-da-solução)
+- [2. Problema Resolvido](#2-problema-resolvido)
+- [3. Funcionalidades Principais](#3-funcionalidades-principais)
+- [4. Arquitetura da Solução](#4-arquitetura-da-solução)
+- [5. Fluxos de Funcionamento](#5-fluxos-de-funcionamento)
+- [6. Tecnologias Utilizadas](#6-tecnologias-utilizadas)
+- [7. Estrutura do Projeto](#7-estrutura-do-projeto)
+- [8. Endpoints da API](#8-endpoints-da-api)
+- [9. Persistência no Oracle Database](#9-persistência-no-oracle-database)
+- [10. Como Executar o Projeto](#10-como-executar-o-projeto)
+- [11. Configuração do Ollama](#11-configuração-do-ollama)
+- [12. Configuração do Oracle](#12-configuração-do-oracle)
+- [13. Prompts e Estratégia de IA](#13-prompts-e-estratégia-de-ia)
+- [14. Base de Conhecimento RAG](#14-base-de-conhecimento-rag)
+- [15. Evidências de Qualidade](#15-evidências-de-qualidade)
+- [16. Limitações Declaradas](#16-limitações-declaradas)
+- [17. Evoluções Futuras](#17-evoluções-futuras)
+- [18. Critérios Atendidos na Entrega](#18-critérios-atendidos-na-entrega)
+- [19. Integrantes](#19-integrantes)
 
 ---
 
-## Sobre o Projeto
+## 1. Objetivo da Solução
 
-O **Argus IA Spring** é o módulo de Inteligência Artificial do ecossistema Argus.
+O objetivo do módulo é entregar uma solução funcional de **IA Generativa aplicada a um problema real**, alinhada ao entregável da disciplina **Disruptive Architectures: IoT, IoB & Generative IA**.
 
-Dentro da solução completa, este serviço é responsável por:
+O sistema resolve duas necessidades principais:
 
-1. Receber dados estruturados de uma ocorrência ambiental.
-2. Gerar um relatório técnico em linguagem formal.
-3. Receber perguntas sobre procedimentos operacionais.
-4. Recuperar contexto em uma base interna de conhecimento.
-5. Utilizar um modelo generativo local via Spring AI e Ollama.
-6. Retornar respostas orientativas para apoio documental.
+1. **Gerar relatórios técnicos padronizados** a partir de dados estruturados de ocorrência.
+2. **Responder dúvidas procedimentais** com base em uma base interna de conhecimento, apoiando brigadistas e coordenadores.
 
-A IA atua como apoio à documentação e consulta protocolar, sem substituir o conhecimento técnico, o treinamento profissional ou a decisão operacional dos brigadistas.
+Além disso, os relatórios gerados são **persistidos no Oracle Database** e podem ser **reemitidos posteriormente** por meio de endpoint específico.
 
 ---
 
-## Contexto da Global Solution
+## 2. Problema Resolvido
 
-A Global Solution 2026/1 propõe soluções conectadas à economia espacial, uso de dados orbitais, monitoramento climático, prevenção de desastres e aplicação de tecnologia para problemas reais na Terra.
+O brigadista profissional já possui treinamento para atuação em campo. O problema real atacado pela solução não é o combate ao fogo em si, e sim a **sobrecarga documental e burocrática** associada às ocorrências.
 
-O Argus se encaixa nesse tema ao propor uma plataforma de apoio ao combate a incêndios florestais com uso de dados, automação e IA. A solução considera o uso de focos de calor detectados por satélites e transforma esses dados em informação útil para operação em campo, documentação e tomada de decisão.
+### Dor de negócio atendida
 
-Este repositório representa especificamente o módulo de **Disruptive Architectures: IoT, IoB & Generative IA**, com foco em **IA Generativa** e **RAG**.
-
----
-
-## Objetivo da Inteligência Artificial
-
-A IA do Argus tem como objetivo apoiar tarefas documentais e consultivas de brigadistas e coordenadores.
-
-A solução não foi criada para ensinar o brigadista a combater incêndios. O público-alvo já possui treinamento técnico. A IA foi posicionada para reduzir esforço burocrático, padronizar relatórios e auxiliar na consulta de procedimentos.
-
-### Objetivos principais
-
-- Gerar relatórios técnicos formais a partir de dados estruturados.
-- Apoiar o registro de ocorrências ambientais.
-- Reduzir o tempo gasto na redação de documentos.
-- Fornecer respostas orientativas baseadas em uma base interna de conhecimento.
-- Usar IA generativa local por meio do Ollama.
-- Evitar exposição de chaves externas de API.
-- Manter o processamento da IA no backend.
-- Declarar limites de uso da IA de forma transparente.
+- tempo gasto para redigir relatórios formais;
+- dificuldade de padronização textual;
+- necessidade de consultar procedimentos rapidamente;
+- necessidade de recuperar relatórios emitidos anteriormente;
+- apoio técnico a brigadistas novatos, voluntários ou equipes em rotação entre biomas.
 
 ---
 
-## Funcionalidades
+## 3. Funcionalidades Principais
 
-### 1. Health Check
+### 3.1 Health Check
 
-Endpoint simples para verificar se a API está em execução.
+Verifica se a aplicação está em execução.
 
 ```http
 GET /api/v1/ia/health
 ```
 
-Retorno esperado:
-
-```txt
-Assistente IA Argus rodando com sucesso!
-```
-
 ---
 
-### 2. Gerador Automático de Relatório Técnico
+### 3.2 Gerar Relatório Técnico
 
-Recebe dados estruturados de uma ocorrência e utiliza IA generativa local para produzir um relatório técnico formal.
+Recebe dados estruturados da ocorrência e gera um relatório técnico formal.
 
-Exemplo de dados recebidos:
-
-- Localização da ocorrência.
-- Tipo de vegetação.
-- Tamanho estimado da área atingida.
-- Ações tomadas.
-- Recursos utilizados.
-- Número de brigadistas.
-- Nível de risco.
-
-A saída é um texto técnico estruturado, pronto para revisão, documentação ou exportação futura.
-
----
-
-### 3. Consulta a Procedimentos com RAG
-
-Recebe uma pergunta do usuário, recupera contexto em uma base interna de procedimentos e utiliza o modelo local para gerar uma resposta orientativa.
-
-Exemplos de perguntas:
-
-- Qual procedimento em caso de ocorrência com vítima?
-- Como proceder em área de terra indígena?
-- O que fazer com EPIs após o combate?
-- Quando considerar evacuação?
-
-A resposta sempre informa a fonte utilizada e reforça que o assistente não substitui a decisão operacional.
-
----
-
-## Arquitetura da Solução
-
-A arquitetura foi organizada em camadas para separar responsabilidades e facilitar manutenção, testes e evolução futura.
-
-```txt
-+--------------------------------------------------------------+
-|                       Cliente / Usuário                      |
-|                                                              |
-|        Swagger UI / App Mobile / Frontend / API Gateway      |
-+-------------------------------+------------------------------+
-                                |
-                                | HTTP REST / JSON
-                                v
-+--------------------------------------------------------------+
-|                        Camada de Entrada                     |
-|                                                              |
-|  HealthController                                            |
-|  IaController                                                |
-|                                                              |
-|  Responsável por expor os endpoints REST, receber            |
-|  requisições, validar payloads e devolver respostas          |
-|  padronizadas em JSON.                                       |
-+-------------------------------+------------------------------+
-                                |
-                                v
-+--------------------------------------------------------------+
-|                       Camada de Aplicação                    |
-|                                                              |
-|  IaService                                                   |
-|                                                              |
-|  Responsável por orquestrar os casos de uso da IA:           |
-|  geração de relatório técnico e consulta a procedimentos.    |
-+-------------------------------+------------------------------+
-                                |
-                +---------------+----------------+
-                |                                |
-                v                                v
-+-------------------------------+  +-------------------------------+
-|     Geração de Relatório      |  |          RagService          |
-|                               |  |                               |
-|  Monta o prompt técnico com   |  |  Recupera contexto da base    |
-|  dados estruturados da        |  |  interna de procedimentos.    |
-|  ocorrência.                  |  |                               |
-+---------------+---------------+  +---------------+---------------+
-                |                                  |
-                +---------------+------------------+
-                                |
-                                v
-+--------------------------------------------------------------+
-|                    Spring AI ChatClient                      |
-|                                                              |
-|  Camada responsável por integrar a aplicação Java com o       |
-|  modelo generativo local executado via Ollama.                |
-+-------------------------------+------------------------------+
-                                |
-                                v
-+--------------------------------------------------------------+
-|                         Ollama Local                         |
-|                                                              |
-|  Modelo: llama3.2:1b                                          |
-|  Execução local, sem chave de API externa e sem OpenAI.       |
-+-------------------------------+------------------------------+
-                                |
-                                v
-+--------------------------------------------------------------+
-|                       Camada de Resposta                     |
-|                                                              |
-|  GerarRelatorioResponse                                      |
-|  ConsultaResponse                                            |
-|                                                              |
-|  Retorna JSON com relatório, resposta e fonte utilizada.     |
-+--------------------------------------------------------------+
-```
-
----
-
-## Visão Técnica em Camadas
-
-### Camada Controller
-
-Responsável por receber chamadas HTTP e expor os endpoints da aplicação.
-
-Arquivos principais:
-
-```txt
-HealthController.java
-IaController.java
-```
-
-### Camada Service
-
-Responsável pelas regras de negócio e orquestração dos casos de uso.
-
-Arquivo principal:
-
-```txt
-IaService.java
-```
-
-### Camada DTO
-
-Responsável por representar os dados de entrada e saída da API.
-
-Arquivos principais:
-
-```txt
-GerarRelatorioRequest.java
-GerarRelatorioResponse.java
-ConsultaRequest.java
-ConsultaResponse.java
-```
-
-### Camada RAG
-
-Responsável pela recuperação de contexto a partir de uma base interna de conhecimento.
-
-Arquivo principal:
-
-```txt
-RagService.java
-```
-
-### Camada de Configuração
-
-Responsável pelas configurações gerais da API e da documentação OpenAPI.
-
-Arquivo principal:
-
-```txt
-OpenApiConfig.java
-```
-
----
-
-## Fluxo de Funcionamento
-
-### Fluxo 1 - Geração de Relatório
-
-```txt
-Usuário envia dados da ocorrência
-        |
-        v
+```http
 POST /api/v1/ia/gerar-relatorio
-        |
-        v
-IaController valida o JSON
-        |
-        v
-IaService monta o prompt técnico
-        |
-        v
-Spring AI envia o prompt para o Ollama
-        |
-        v
-Ollama gera o relatório com modelo local
-        |
-        v
-API retorna GerarRelatorioResponse
-        |
-        v
-Usuário recebe relatório formal
 ```
 
-### Fluxo 2 - Consulta RAG
+**Resultado:**
+- relatório estruturado;
+- persistência no Oracle;
+- retorno do `id` do relatório salvo.
 
-```txt
-Usuário envia uma pergunta
-        |
-        v
+---
+
+### 3.3 Reemitir Relatório Salvo
+
+Permite consultar novamente um relatório anteriormente salvo, utilizando o identificador gerado no momento da criação.
+
+```http
+GET /api/v1/ia/relatorios/{id}
+```
+
+**Resultado:**
+- recuperação do relatório salvo no banco;
+- retorno dos principais metadados da ocorrência;
+- suporte a rastreabilidade documental.
+
+---
+
+### 3.4 Consultar Procedimentos com IA + RAG
+
+Recebe uma pergunta e utiliza a base interna de conhecimento para recuperar contexto. Em seguida, o modelo local via Ollama gera uma resposta orientativa.
+
+```http
 POST /api/v1/ia/consultar
-        |
-        v
-IaController valida o JSON
-        |
-        v
-IaService chama RagService
-        |
-        v
-RagService recupera contexto da base interna
-        |
-        v
-IaService monta prompt com contexto + pergunta
-        |
-        v
-Spring AI envia o prompt para o Ollama
-        |
-        v
-Ollama gera resposta orientativa
-        |
-        v
-API retorna ConsultaResponse com resposta e fonte
+```
+
+**Resultado:**
+- resposta contextual;
+- indicação da fonte lógica utilizada;
+- apoio documental e procedimental.
+
+---
+
+## 4. Arquitetura da Solução
+
+## 4.1 Visão arquitetural de alto nível
+
+```mermaid
+flowchart LR
+    U[Usuário / Swagger / App Cliente] --> C[Controllers REST]
+    C --> S[IaService]
+    S --> R1[Gerador Estruturado de Relatório]
+    S --> R2[RagService]
+    R2 --> KB[Base de Conhecimento Interna]
+    R2 --> AI[Spring AI + ChatClient]
+    AI --> O[Ollama - llama3.2:1b]
+    R1 --> DB[(Oracle Database)]
+    S --> DB
+    DB --> S
+    S --> RESP[DTOs de Resposta JSON]
+    RESP --> U
 ```
 
 ---
 
-## Tecnologias Utilizadas
+## 4.2 Diagrama em camadas
 
-| Ícone | Tecnologia | Uso no Projeto |
+```mermaid
+flowchart TD
+    A[Camada de Apresentação] --> B[Camada de Aplicação]
+    B --> C[Camada de IA / Orquestração]
+    B --> D[Camada de Persistência]
+    C --> E[Modelo Local Ollama]
+    C --> F[Base de Conhecimento RAG]
+    D --> G[(Oracle Database)]
+
+    A:::layer
+    B:::layer
+    C:::layer
+    D:::layer
+    E:::infra
+    F:::infra
+    G:::infra
+
+    classDef layer fill:#E8F5E9,stroke:#2E7D32,color:#1B1B1B;
+    classDef infra fill:#FFF3E0,stroke:#EF6C00,color:#1B1B1B;
+```
+
+### Interpretação rápida da arquitetura
+
+- **Camada de apresentação:** expõe endpoints REST e documentação Swagger.
+- **Camada de aplicação:** coordena os casos de uso da solução.
+- **Camada de IA:** integra RAG + Spring AI + Ollama para respostas contextuais.
+- **Camada de persistência:** grava e recupera relatórios no Oracle Database.
+
+---
+
+## 4.3 Componentes principais
+
+| Componente | Responsabilidade |
+|---|---|
+| `HealthController` | Verificação de disponibilidade da API |
+| `IaController` | Exposição dos endpoints de IA |
+| `IaService` | Orquestra geração, consulta e reemissão |
+| `RagService` | Recuperação de contexto da base interna |
+| `RelatorioOcorrenciaRepository` | Persistência e consulta dos relatórios |
+| `RelatorioOcorrencia` | Entidade JPA mapeada no Oracle |
+| `ChatClient` | Integração do Spring AI com o modelo local |
+| `Ollama` | Execução do LLM local `llama3.2:1b` |
+
+---
+
+## 4.4 Diagrama de sequência — geração e reemissão do relatório
+
+```mermaid
+sequenceDiagram
+    participant U as Usuário
+    participant API as IaController
+    participant S as IaService
+    participant DB as Oracle Database
+
+    U->>API: POST /api/v1/ia/gerar-relatorio
+    API->>S: gerarRelatorio(request)
+    S->>S: gerarRelatorioEstruturado()
+    S->>DB: save(RelatorioOcorrencia)
+    DB-->>S: id + dados persistidos
+    S-->>API: GerarRelatorioResponse(id, relatorio)
+    API-->>U: JSON com id e relatório
+
+    U->>API: GET /api/v1/ia/relatorios/{id}
+    API->>S: reemitirRelatorio(id)
+    S->>DB: findById(id)
+    DB-->>S: RelatorioOcorrencia
+    S-->>API: RelatorioReemitidoResponse
+    API-->>U: JSON com dados salvos
+```
+
+---
+
+## 4.5 Diagrama de sequência — consulta com IA + RAG
+
+```mermaid
+sequenceDiagram
+    participant U as Usuário
+    participant API as IaController
+    participant S as IaService
+    participant R as RagService
+    participant AI as Spring AI
+    participant O as Ollama
+
+    U->>API: POST /api/v1/ia/consultar
+    API->>S: consultarProcedimento(pergunta)
+    S->>R: buscarContexto(pergunta)
+    R-->>S: contexto
+    S->>AI: prompt(contexto + pergunta)
+    AI->>O: chamada ao modelo local
+    O-->>AI: resposta gerada
+    AI-->>S: resposta
+    S-->>API: ConsultaResponse
+    API-->>U: resposta + fonte
+```
+
+---
+
+## 5. Fluxos de Funcionamento
+
+### 5.1 Fluxo de geração do relatório
+
+1. O usuário envia dados estruturados da ocorrência.
+2. O controller valida o payload.
+3. O `IaService` gera o relatório técnico estruturado.
+4. O relatório é salvo no Oracle Database.
+5. O sistema retorna o `id` e o texto gerado.
+
+### 5.2 Fluxo de reemissão
+
+1. O usuário informa o `id` do relatório.
+2. O `IaService` consulta o Oracle.
+3. O sistema retorna o relatório persistido e seus dados principais.
+
+### 5.3 Fluxo de consulta com IA
+
+1. O usuário envia uma pergunta.
+2. O `RagService` recupera o contexto da base interna.
+3. O Spring AI monta o prompt com contexto + pergunta.
+4. O Ollama processa localmente.
+5. O sistema devolve a resposta orientativa.
+
+---
+
+## 6. Tecnologias Utilizadas
+
+| Tecnologia | Finalidade |
+|---|---|
+| ![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white) | Linguagem principal do backend |
+| ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=flat-square&logo=springboot&logoColor=white) | Framework da API REST |
+| ![Spring AI](https://img.shields.io/badge/Spring_AI-Framework-6DB33F?style=flat-square&logo=spring&logoColor=white) | Integração com IA generativa |
+| ![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-000000?style=flat-square&logo=ollama&logoColor=white) | Execução local do modelo generativo |
+| ![Oracle](https://img.shields.io/badge/Oracle-Database-F80000?style=flat-square&logo=oracle&logoColor=white) | Persistência dos relatórios |
+| ![JPA](https://img.shields.io/badge/Spring_Data_JPA-Persistence-59666C?style=flat-square) | Acesso a dados e mapeamento ORM |
+| ![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=flat-square&logo=swagger&logoColor=black) | Documentação e teste da API |
+| ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=flat-square&logo=apachemaven&logoColor=white) | Gerenciamento de dependências |
+| ![Git](https://img.shields.io/badge/Git-Versionamento-F05032?style=flat-square&logo=git&logoColor=white) | Controle de versão |
+| ![GitHub](https://img.shields.io/badge/GitHub-Reposit%C3%B3rio-181717?style=flat-square&logo=github&logoColor=white) | Hospedagem do código |
+
+---
+
+## 7. Estrutura do Projeto
+
+```txt
+src/main/java/br/com/argus/ia
+├── controller
+│   ├── HealthController.java
+│   └── IaController.java
+├── dto
+│   ├── ConsultaRequest.java
+│   ├── ConsultaResponse.java
+│   ├── GerarRelatorioRequest.java
+│   ├── GerarRelatorioResponse.java
+│   └── RelatorioReemitidoResponse.java
+├── exception
+│   ├── ErroResponse.java
+│   └── GlobalExceptionHandler.java
+├── model
+│   └── RelatorioOcorrencia.java
+├── rag
+│   └── RagService.java
+├── repository
+│   └── RelatorioOcorrenciaRepository.java
+├── service
+│   └── IaService.java
+└── ArgusIaSpringApplication.java
+
+src/main/resources
+└── application.properties
+```
+
+---
+
+## 8. Endpoints da API
+
+| Método | Endpoint | Objetivo |
 |---|---|---|
-| ![Java](https://img.shields.io/badge/-Java%2017-ED8B00?style=flat&logo=openjdk&logoColor=white) | Java 17 | Linguagem principal da aplicação |
-| ![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=springboot&logoColor=white) | Spring Boot | Framework principal da API |
-| ![Spring](https://img.shields.io/badge/-Spring%20Web-6DB33F?style=flat&logo=spring&logoColor=white) | Spring Web MVC | Criação dos endpoints REST |
-| ![Validation](https://img.shields.io/badge/-Validation-6DB33F?style=flat&logo=spring&logoColor=white) | Spring Validation | Validação dos dados de entrada |
-| ![Spring AI](https://img.shields.io/badge/-Spring%20AI-6DB33F?style=flat&logo=spring&logoColor=white) | Spring AI | Integração com modelo generativo local |
-| ![Ollama](https://img.shields.io/badge/-Ollama-000000?style=flat&logo=ollama&logoColor=white) | Ollama | Execução local do modelo de linguagem |
-| ![Llama](https://img.shields.io/badge/-llama3.2:1b-000000?style=flat&logo=meta&logoColor=white) | llama3.2:1b | Modelo generativo utilizado localmente |
-| ![Swagger](https://img.shields.io/badge/-Swagger/OpenAPI-85EA2D?style=flat&logo=swagger&logoColor=black) | Swagger/OpenAPI | Documentação e teste dos endpoints |
-| ![Maven](https://img.shields.io/badge/-Maven-C71A36?style=flat&logo=apachemaven&logoColor=white) | Maven | Gerenciamento de dependências e build |
-| ![Git](https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white) | Git | Versionamento do código |
-| ![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat&logo=github&logoColor=white) | GitHub | Hospedagem do repositório |
+| `GET` | `/api/v1/ia/health` | Verificar se a API está disponível |
+| `POST` | `/api/v1/ia/gerar-relatorio` | Gerar e salvar relatório técnico |
+| `GET` | `/api/v1/ia/relatorios/{id}` | Reemitir relatório salvo no Oracle |
+| `POST` | `/api/v1/ia/consultar` | Consultar procedimentos com IA + RAG |
 
----
+### Exemplo — gerar relatório
 
-## Estrutura do Projeto
-
-```txt
-argus-ia-spring
-├── examples
-│   ├── consultar-procedimento-request-01.json
-│   ├── consultar-procedimento-request-02.json
-│   ├── consultar-procedimento-request-03.json
-│   ├── gerar-relatorio-request-01.json
-│   ├── gerar-relatorio-request-02.json
-│   └── gerar-relatorio-request-03.json
-├── src
-│   └── main
-│       ├── java
-│       │   └── br
-│       │       └── com
-│       │           └── argus
-│       │               └── ia
-│       │                   ├── config
-│       │                   │   └── OpenApiConfig.java
-│       │                   ├── controller
-│       │                   │   ├── HealthController.java
-│       │                   │   └── IaController.java
-│       │                   ├── dto
-│       │                   │   ├── ConsultaRequest.java
-│       │                   │   ├── ConsultaResponse.java
-│       │                   │   ├── GerarRelatorioRequest.java
-│       │                   │   └── GerarRelatorioResponse.java
-│       │                   ├── exception
-│       │                   │   ├── ErroResponse.java
-│       │                   │   └── GlobalExceptionHandler.java
-│       │                   ├── rag
-│       │                   │   └── RagService.java
-│       │                   ├── service
-│       │                   │   └── IaService.java
-│       │                   └── ArgusIaSpringApplication.java
-│       └── resources
-│           └── application.properties
-├── PROMPTS.md
-├── README.md
-├── ROTEIRO_VIDEO.md
-└── pom.xml
-```
-
----
-
-## Endpoints da API
-
-A documentação interativa da API pode ser acessada em:
-
-```txt
-http://localhost:8080/swagger-ui/index.html
-```
-
----
-
-### Health Check
-
-```http
-GET /api/v1/ia/health
-```
-
-#### Resposta
-
-```txt
-Assistente IA Argus rodando com sucesso!
-```
-
----
-
-### Gerar Relatório Técnico
-
-```http
-POST /api/v1/ia/gerar-relatorio
-```
-
-#### Request Body
+**Request**
 
 ```json
 {
@@ -443,23 +378,40 @@ POST /api/v1/ia/gerar-relatorio
 }
 ```
 
-#### Response Body
+**Response**
 
 ```json
 {
+  "id": 1,
   "relatorio": "RELATÓRIO TÉCNICO DE OCORRÊNCIA - ARGUS..."
 }
 ```
 
----
+### Exemplo — reemitir relatório
 
-### Consultar Procedimento
+**Request**
 
 ```http
-POST /api/v1/ia/consultar
+GET /api/v1/ia/relatorios/1
 ```
 
-#### Request Body
+**Response**
+
+```json
+{
+  "id": 1,
+  "localizacao": "Parque Nacional da Chapada dos Veadeiros - GO",
+  "tipoVegetacao": "Cerrado com vegetação seca",
+  "tamanhoEstimado": "Aproximadamente 12 hectares",
+  "nivelRisco": "Alto",
+  "relatorio": "RELATÓRIO TÉCNICO DE OCORRÊNCIA - ARGUS...",
+  "criadoEm": "2026-06-01T10:30:00"
+}
+```
+
+### Exemplo — consulta de procedimento
+
+**Request**
 
 ```json
 {
@@ -467,302 +419,281 @@ POST /api/v1/ia/consultar
 }
 ```
 
-#### Response Body
+**Response**
 
 ```json
 {
-  "resposta": "Resposta do Assistente IA Argus...",
+  "resposta": "Em caso de ocorrência com vítima, a segurança da equipe e da área deve ser priorizada...",
   "fonte": "Base interna de procedimentos Argus + Spring AI Ollama"
 }
 ```
 
 ---
 
-## Como Executar o Projeto
+## 9. Persistência no Oracle Database
+
+Os relatórios são gravados no **Oracle Database** por meio de **Spring Data JPA**.
+
+### Entidade persistida
+
+- `RelatorioOcorrencia`
+
+### Tabela principal
+
+- `TB_RELATORIO_OCORRENCIA`
+
+### Campos principais
+
+- `ID_RELATORIO`
+- `LOCALIZACAO`
+- `TIPO_VEGETACAO`
+- `TAMANHO_ESTIMADO`
+- `ACOES_TOMADAS`
+- `RECURSOS_UTILIZADOS`
+- `NUMERO_BRIGADISTAS`
+- `NIVEL_RISCO`
+- `RELATORIO`
+- `CRIADO_EM`
+
+### Vantagem acadêmica e técnica
+
+Essa camada mostra que o projeto não apenas gera a informação, mas também:
+
+- persiste o resultado;
+- oferece rastreabilidade;
+- permite consulta posterior;
+- aproxima a solução de um cenário real de uso.
+
+---
+
+## 10. Como Executar o Projeto
 
 ### Pré-requisitos
 
-Antes de executar, verifique se possui instalado:
-
 - Java 17
 - Maven
-- Git
-- IntelliJ IDEA ou outra IDE Java
+- IntelliJ IDEA Community
 - Ollama instalado
-- Modelo `llama3.2:1b` baixado no Ollama
+- Oracle Database acessível
 
----
-
-### Instalar e preparar o Ollama
-
-Verifique se o Ollama está instalado:
+### Passos
 
 ```bash
-ollama --version
-```
+# 1. Clonar o repositório
+git clone COLE_AQUI_O_LINK_DO_REPOSITORIO
 
-Baixe o modelo utilizado pelo projeto:
-
-```bash
-ollama pull llama3.2:1b
-```
-
-Teste o modelo localmente:
-
-```bash
-ollama run llama3.2:1b
-```
-
-Para sair do chat do Ollama:
-
-```txt
-/bye
-```
-
-Verifique se o modelo foi instalado:
-
-```bash
-ollama list
-```
-
----
-
-### Clonar o repositório
-
-```bash
-git clone https://github.com/DudaAraujo14/argus-ia-spring.git
-```
-
-Entrar na pasta:
-
-```bash
+# 2. Entrar na pasta do projeto
 cd argus-ia-spring
-```
 
----
+# 3. Baixar o modelo no Ollama
+ollama pull llama3.2:1b
 
-### Configurar `application.properties`
+# 4. Rodar o Ollama (caso necessário)
+ollama run llama3.2:1b
 
-O projeto usa Ollama local. Não é necessário configurar chave da OpenAI.
-
-Arquivo:
-
-```txt
-src/main/resources/application.properties
-```
-
-Configuração esperada:
-
-```properties
-spring.application.name=argus-ia-spring
-server.port=8080
-
-spring.ai.ollama.base-url=http://localhost:11434
-spring.ai.ollama.chat.options.model=llama3.2:1b
-spring.ai.ollama.chat.options.temperature=0.2
-```
-
----
-
-### Executar com Maven
-
-```bash
+# 5. Executar a aplicação Spring Boot
 mvn spring-boot:run
 ```
 
----
+Depois, acessar:
 
-### Executar pelo IntelliJ
-
-1. Abra o projeto no IntelliJ.
-2. Aguarde o Maven carregar as dependências.
-3. Confirme que o Ollama está instalado e com o modelo `llama3.2:1b`.
-4. Abra a classe:
-
-```txt
-ArgusIaSpringApplication.java
-```
-
-5. Clique em **Run**.
-6. Acesse:
-
-```txt
-http://localhost:8080/api/v1/ia/health
-```
-
-7. Acesse o Swagger:
-
-```txt
-http://localhost:8080/swagger-ui/index.html
-```
+- Swagger: `http://localhost:8080/swagger-ui/index.html`
+- Health: `http://localhost:8080/api/v1/ia/health`
 
 ---
 
-## Configuração da IA Local
+## 11. Configuração do Ollama
 
-A aplicação não utiliza OpenAI, ChatGPT API ou qualquer chave externa paga.
+A aplicação utiliza **modelo local**, sem OpenAI e sem necessidade de chave externa.
 
-A integração com IA generativa é feita por meio de:
+### Configuração utilizada
 
-```txt
-Spring AI + Ollama + llama3.2:1b
+```properties
+spring.ai.ollama.base-url=http://localhost:11434
+spring.ai.ollama.chat.model=llama3.2:1b
 ```
 
-Essa abordagem permite:
+### Justificativa da escolha
 
-- executar o modelo localmente;
-- evitar exposição de API key;
-- evitar cobrança por chamadas externas;
-- manter a chamada ao modelo dentro do backend;
-- demonstrar uso real de IA generativa no projeto.
+- evita custos com API externa;
+- evita exposição de chave;
+- facilita demonstração local;
+- mantém aderência ao requisito de IA generativa real.
 
 ---
 
-## Documentação dos Prompts
+## 12. Configuração do Oracle
 
-Os prompts utilizados e planejados para a solução estão documentados no arquivo:
+Exemplo de configuração no `application.properties`:
+
+```properties
+spring.datasource.url=${ORACLE_DB_URL:jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL}
+spring.datasource.username=${ORACLE_DB_USER:rmXXXXX}
+spring.datasource.password=${ORACLE_DB_PASSWORD}
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+```
+
+### Observação
+
+A senha do banco deve ser mantida em **variável de ambiente**, evitando exposição em repositório público.
+
+---
+
+## 13. Prompts e Estratégia de IA
+
+A documentação dos prompts está no arquivo:
 
 ```txt
 PROMPTS.md
 ```
 
-Esse arquivo descreve:
+### Estratégia adotada
 
-- objetivo da IA;
-- prompt de geração de relatório;
-- prompt de consulta RAG;
-- comportamento esperado;
-- parâmetros utilizados;
-- limitações declaradas.
+#### Geração de relatório
 
----
+Foi adotada uma **geração estruturada controlada**, com foco em:
 
-## Base de Conhecimento RAG
+- fidelidade aos dados recebidos;
+- padronização documental;
+- redução de alucinação;
+- segurança da informação.
 
-A versão atual utiliza uma base interna de conhecimento em memória, implementada no `RagService`.
+#### Consulta com IA
 
-Temas contemplados:
+Foi adotado o fluxo:
 
-- ocorrência com vítima;
-- entrada ou atuação em terra indígena;
-- verificação de EPI;
-- evacuação;
-- ausência de contexto suficiente.
-
-Essa abordagem demonstra o conceito de RAG de forma objetiva: antes de responder, a aplicação recupera um contexto relevante da base interna e envia esse contexto ao modelo generativo local.
+- recuperar contexto na base interna;
+- injetar o contexto no prompt;
+- gerar resposta com Spring AI + Ollama;
+- informar a fonte lógica da resposta.
 
 ---
 
-## Limitações da Solução
+## 14. Base de Conhecimento RAG
 
-A solução possui limites declarados para evitar uso indevido da IA.
+Na versão atual, a base de conhecimento é **interna e controlada**, carregada no backend para apoiar as consultas procedimentais.
 
-- A IA não substitui treinamento profissional.
-- A IA não substitui decisão operacional em campo.
-- A IA não ensina técnicas de combate ao fogo.
-- A IA não deve inventar protocolos.
-- A IA não substitui documentos oficiais completos.
-- A IA atua como apoio documental e burocrático.
-- A base interna deve ser expandida conforme novos documentos e protocolos forem incorporados.
+### Finalidade da base
 
----
+- orientar perguntas frequentes;
+- reduzir respostas genéricas;
+- demonstrar arquitetura do tipo RAG;
+- preparar o sistema para futura evolução com PDFs, embeddings e vector store.
 
-## Evoluções Futuras
+### Evolução prevista
 
-Possíveis melhorias para próximas versões:
-
-- Inclusão de documentos oficiais em PDF.
-- Implementação de chunking automático.
-- Geração de embeddings.
-- Uso de vector store.
-- Exportação do relatório em PDF.
-- Integração com banco Oracle.
-- Integração com aplicativo mobile.
-- Registro histórico de consultas.
-- Autenticação com JWT.
-- Testes automatizados para controllers e services.
-- Dashboard para acompanhamento das consultas e relatórios gerados.
-- Ampliação da base de conhecimento por bioma, órgão e tipo de ocorrência.
+- ingestão de PDFs oficiais do IBAMA, ICMBio e Defesa Civil;
+- chunking dos documentos;
+- embeddings;
+- vector store;
+- retrieval por similaridade semântica.
 
 ---
 
-## Critérios Atendidos na Entrega de IA
+## 15. Evidências de Qualidade
 
-| Critério | Como foi atendido |
-|---|---|
-| Aplicação de IA Generativa | Integração com Spring AI e Ollama para geração de respostas com modelo local |
-| Caso de uso real | Apoio documental a brigadistas e coordenadores em ocorrências ambientais |
-| API funcional | Endpoints REST com Spring Boot |
-| Interface de teste | Swagger/OpenAPI |
-| RAG | Recuperação de contexto em base interna de procedimentos |
-| Documentação de prompts | Arquivo PROMPTS.md |
-| Documentação do projeto | README.md |
-| Demonstração | Endpoints testáveis via Swagger |
-| Limites da IA | Declarados no README e PROMPTS.md |
-| Segurança de chave | Não utiliza API key externa no projeto |
+O projeto já contempla:
 
----
+- validação de entrada com Bean Validation;
+- tratamento global de erros;
+- documentação Swagger/OpenAPI;
+- persistência real em banco relacional;
+- separação em camadas;
+- uso real de IA generativa local;
+- registro de testes manuais em `AVALIACAO_IA.md`.
 
-## Integrantes
+Arquivos complementares relevantes:
 
-| Nome | RM | Turma |
-|---|---|---|
-| Maria Eduarda | Adicionar RM | Adicionar turma |
-| Integrante 2 | Adicionar RM | Adicionar turma |
-| Integrante 3 | Adicionar RM | Adicionar turma |
+- `PROMPTS.md`
+- `AVALIACAO_IA.md`
+- `ROTEIRO_VIDEO.md`
 
 ---
 
-## Vídeo de Demonstração
+## 17. Evoluções Futuras
 
-Link do vídeo no YouTube:
-
-```txt
-Adicionar link do vídeo aqui
-```
-
-Sugestão para o vídeo:
-
-1. Apresentar o README.
-2. Explicar o objetivo da IA.
-3. Mostrar a arquitetura.
-4. Mostrar que o projeto utiliza Spring AI com Ollama.
-5. Abrir o Swagger.
-6. Testar o endpoint `/api/v1/ia/health`.
-7. Testar o endpoint `/api/v1/ia/gerar-relatorio`.
-8. Testar o endpoint `/api/v1/ia/consultar`.
-9. Finalizar explicando as limitações e futuras melhorias.
+- integração com PDFs oficiais e RAG completo;
+- exportação do relatório em PDF;
+- autenticação de usuários;
+- listagem paginada de relatórios salvos;
+- dashboard de ocorrências;
+- integração com app mobile do ecossistema Argus;
+- inclusão de análise preditiva de risco a partir de dados ambientais.
 
 ---
 
-## Repositório
+## 18. Critérios Atendidos na Entrega
 
-```txt
-https://github.com/DudaAraujo14/argus-ia-spring
-```
+### Aderência ao entregável da disciplina
+
+- solução funcional com **IA Generativa**;
+- integração com **modelo generativo real**;
+- uso de **API REST**;
+- persistência em **banco de dados Oracle**;
+- documentação de arquitetura;
+- documentação dos prompts;
+- casos de uso bem definidos;
+- tratamento de erros e validação;
+- demonstração prática via Swagger;
+- projeto alinhado ao problema real da Global Solution.
+
+### Destaques do projeto
+
+- IA executando localmente via Ollama;
+- reemissão de relatório salvo via `GET`;
+- arquitetura organizada e compreensível para banca técnica;
+- solução honesta, funcional e defensável.
+
+---
+
+## 19. Integrantes
+
+> Preencha com os dados oficiais do grupo.
+
+- **Nome 1** — RM XXXXX
+- **Nome 2** — RM XXXXX
+- **Maria Eduarda** — RM XXXXX
+
+---
+
+## Demonstração em Vídeo
+
+O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
+
+1. visão geral do README e da arquitetura;
+2. health check;
+3. geração de relatório com retorno do `id`;
+4. reemissão do relatório salvo;
+5. consulta de procedimento com IA + RAG;
+6. explicação do uso do Oracle e do Ollama.
 
 ---
 
 ## Status do Projeto
 
-Projeto funcional.
+**Status atual:** funcional e pronto para demonstração acadêmica.
 
-Funcionalidades implementadas:
+### Implementado
 
-- Health check.
-- Gerador de relatório técnico com IA generativa local.
-- Consulta RAG com base interna de conhecimento.
-- Integração com Spring AI e Ollama.
-- Swagger para testes.
-- Documentação de prompts.
-- Tratamento global de erros.
-- Exemplos de requisições JSON.
-- Roteiro de vídeo.
-- Estrutura organizada em camadas.
-- README profissional para entrega.
+- [x] API REST com Spring Boot
+- [x] Swagger/OpenAPI
+- [x] Geração de relatório técnico
+- [x] Persistência no Oracle Database
+- [x] Reemissão de relatório por `GET`
+- [x] Consulta procedimental com Spring AI + Ollama
+- [x] Estrutura RAG inicial
+- [x] Tratamento de erros
+- [x] Documentação técnica
 
 ---
 
 ## Licença
 
-Projeto acadêmico desenvolvido para fins educacionais no contexto da Global Solution 2026/1 - FIAP.
+Projeto acadêmico desenvolvido para a **FIAP - Global Solution 2026/1**.
+
+Uso educacional.
