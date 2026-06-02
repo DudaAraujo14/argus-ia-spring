@@ -9,13 +9,16 @@ import br.com.argus.ia.service.IaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/ia")
 @Tag(
         name = "Assistente IA Argus",
-        description = "Endpoints de Inteligência Artificial para geração de relatórios técnicos, reemissão de relatórios e consulta a procedimentos operacionais."
+        description = "Endpoints de Inteligência Artificial para geração de relatórios técnicos, reemissão de relatórios, exportação em PDF e consulta a procedimentos operacionais."
 )
 public class IaController {
 
@@ -44,6 +47,25 @@ public class IaController {
     )
     public RelatorioReemitidoResponse reemitirRelatorio(@PathVariable Long id) {
         return iaService.reemitirRelatorio(id);
+    }
+
+    @GetMapping(
+            value = "/relatorios/{id}/pdf",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    @Operation(
+            summary = "Exportar relatório técnico em PDF",
+            description = "Busca um relatório salvo no Oracle e retorna o arquivo PDF para download."
+    )
+    public ResponseEntity<byte[]> exportarRelatorioPdf(@PathVariable Long id) {
+        byte[] pdf = iaService.exportarRelatorioPdf(id);
+
+        String nomeArquivo = "relatorio-argus-" + id + ".pdf";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nomeArquivo)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 
     @PostMapping("/consultar")

@@ -19,15 +19,18 @@ public class IaService {
     private final RagService ragService;
     private final ChatClient chatClient;
     private final RelatorioOcorrenciaRepository relatorioRepository;
+    private final br.com.argus.ia.service.PdfService pdfService;
 
     public IaService(
             RagService ragService,
             ChatClient.Builder chatClientBuilder,
-            RelatorioOcorrenciaRepository relatorioRepository
+            RelatorioOcorrenciaRepository relatorioRepository,
+            br.com.argus.ia.service.PdfService pdfService
     ) {
         this.ragService = ragService;
         this.chatClient = chatClientBuilder.build();
         this.relatorioRepository = relatorioRepository;
+        this.pdfService = pdfService;
     }
 
     public GerarRelatorioResponse gerarRelatorio(GerarRelatorioRequest request) {
@@ -51,8 +54,7 @@ public class IaService {
     }
 
     public RelatorioReemitidoResponse reemitirRelatorio(Long id) {
-        RelatorioOcorrencia relatorio = relatorioRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Relatório não encontrado com o ID: " + id));
+        RelatorioOcorrencia relatorio = buscarRelatorioPorId(id);
 
         return new RelatorioReemitidoResponse(
                 relatorio.getId(),
@@ -63,6 +65,11 @@ public class IaService {
                 relatorio.getRelatorio(),
                 relatorio.getCriadoEm()
         );
+    }
+
+    public byte[] exportarRelatorioPdf(Long id) {
+        RelatorioOcorrencia relatorio = buscarRelatorioPorId(id);
+        return pdfService.gerarPdfRelatorio(relatorio);
     }
 
     public ConsultaResponse consultarProcedimento(String pergunta) {
@@ -128,6 +135,11 @@ public class IaService {
                     "Fallback local por indisponibilidade do Ollama"
             );
         }
+    }
+
+    private RelatorioOcorrencia buscarRelatorioPorId(Long id) {
+        return relatorioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Relatório não encontrado com o ID: " + id));
     }
 
     private String gerarRelatorioEstruturado(GerarRelatorioRequest request) {
