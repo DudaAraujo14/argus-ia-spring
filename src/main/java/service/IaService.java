@@ -7,6 +7,8 @@ import br.com.argus.ia.dto.RelatorioReemitidoResponse;
 import br.com.argus.ia.model.RelatorioOcorrencia;
 import br.com.argus.ia.rag.RagService;
 import br.com.argus.ia.repository.RelatorioOcorrenciaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 
 @Service
 public class IaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(IaService.class);
 
     private final RagService ragService;
     private final ChatClient chatClient;
@@ -119,6 +123,8 @@ public class IaService {
             );
 
         } catch (Exception exception) {
+            logger.error("Erro ao consultar o serviço de IA Gemini.", exception);
+
             String respostaFallback = """
                     Resposta do Assistente IA Argus:
 
