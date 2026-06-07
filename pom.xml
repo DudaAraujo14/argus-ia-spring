@@ -17,7 +17,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <name>argus-ia-spring</name>
-    <description>Assistente de IA do projeto Argus com Spring AI, Ollama, Oracle, RAG e exportação em PDF</description>
+    <description>Assistente de IA do projeto Argus com Spring AI, Google Gemini, Oracle, RAG e exportação em PDF</description>
 
     <properties>
         <java.version>17</java.version>
@@ -96,10 +96,10 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- Spring AI com Ollama local -->
+        <!-- Spring AI com Google Gemini -->
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-ollama</artifactId>
+            <artifactId>spring-ai-starter-model-google-genai</artifactId>
         </dependency>
 
         <!-- OpenPDF para geração/exportação de relatórios em PDF -->

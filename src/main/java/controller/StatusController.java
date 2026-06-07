@@ -228,7 +228,7 @@ public class StatusController {
                                     <h1>Argus IA</h1>
                                     <p class="subtitle">
                                         Assistente de Inteligência Artificial para documentação técnica,
-                                        consulta de procedimentos e reemissão de relatórios.
+                                        consulta de procedimentos, reemissão de relatórios e exportação em PDF.
                                     </p>
                                 </div>
                             </div>
@@ -243,8 +243,8 @@ public class StatusController {
                             </div>
 
                             <div class="metric">
-                                <div class="metric-label">IA Local</div>
-                                <div class="metric-value">Ollama</div>
+                                <div class="metric-label">IA em Nuvem</div>
+                                <div class="metric-value">Google Gemini</div>
                             </div>
 
                             <div class="metric">
@@ -261,7 +261,7 @@ public class StatusController {
 
                             <div class="row">
                                 <span class="label">Módulo</span>
-                                <span class="value">Spring AI + Ollama + Oracle</span>
+                                <span class="value">Spring AI + Gemini + Oracle</span>
                             </div>
 
                             <div class="row">
@@ -287,8 +287,10 @@ public class StatusController {
                         </section>
 
                         <p class="footer">
-                            A IA do Argus atua como uma ferramenta de apoio documental e consultivo 
-                            para brigadistas e coordenadores, auxiliando na padronização de relatórios e na consulta a procedimentos.
+                            O Argus IA atua como uma ferramenta de apoio documental e consultivo
+                            para brigadistas e coordenadores, auxiliando na padronização de relatórios
+                            e na consulta a procedimentos. A solução não substitui treinamento profissional,
+                            protocolos oficiais, avaliação técnica ou decisão operacional em campo.
                         </p>
                     </main>
                 </body>

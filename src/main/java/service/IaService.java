@@ -115,15 +115,15 @@ public class IaService {
 
             return new ConsultaResponse(
                     limparResposta(resposta),
-                    "Base interna de procedimentos Argus + Spring AI Ollama"
+                    "Base interna de procedimentos Argus + Spring AI Gemini"
             );
 
         } catch (Exception exception) {
             String respostaFallback = """
                     Resposta do Assistente IA Argus:
 
-                    A consulta ao modelo local não pôde ser concluída no momento.
-                    Com base na base de procedimentos carregada, segue a orientação local:
+                    A consulta ao serviço de IA não pôde ser concluída no momento.
+                    Com base na base de procedimentos carregada, segue a orientação disponível:
 
                     %s
 
@@ -132,7 +132,7 @@ public class IaService {
 
             return new ConsultaResponse(
                     limparResposta(respostaFallback),
-                    "Fallback local por indisponibilidade do Ollama"
+                    "Fallback por indisponibilidade do serviço de IA"
             );
         }
     }
