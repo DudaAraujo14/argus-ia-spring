@@ -3,11 +3,12 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17" />
   <img src="https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
-  <img src="https://img.shields.io/badge/Spring_AI-Ollama-6DB33F?style=for-the-badge&logo=spring&logoColor=white" alt="Spring AI" />
-  <img src="https://img.shields.io/badge/Ollama-llama3.2%3A1b-000000?style=for-the-badge&logo=ollama&logoColor=white" alt="Ollama" />
+  <img src="https://img.shields.io/badge/Groq_API-IA_em_Nuvem-FF6B00?style=for-the-badge&logo=groq&logoColor=white" alt="Groq API" />
+  <img src="https://img.shields.io/badge/Llama-via_Groq-000000?style=for-the-badge&logo=meta&logoColor=white" alt="Llama via Groq" />
   <img src="https://img.shields.io/badge/Oracle_Database-Relational_DB-F80000?style=for-the-badge&logo=oracle&logoColor=white" alt="Oracle Database" />
   <img src="https://img.shields.io/badge/Swagger-OpenAPI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" />
   <img src="https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" alt="Maven" />
+  <img src="https://img.shields.io/badge/Azure-Web_App-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white" alt="Azure Web App" />
   <img src="https://img.shields.io/badge/Status-Funcional-success?style=for-the-badge" alt="Status" />
 </p>
 
@@ -22,12 +23,14 @@
 
 O **Argus IA Spring** é o módulo de Inteligência Artificial do ecossistema **Argus**, desenvolvido para apoiar brigadistas e coordenadores no **registro de ocorrências ambientais** e na **consulta de procedimentos operacionais**.
 
-A solução foi construída com **Spring Boot**, **Spring AI**, **Ollama** e **Oracle Database**, combinando:
+A solução foi construída com **Spring Boot**, **Groq API**, **Oracle Database** e **RAG interno**, combinando:
 
-- **IA generativa local** para apoio consultivo;
+- **IA generativa em nuvem via Groq API** para apoio consultivo;
 - **persistência relacional** para armazenar e reemitir relatórios;
+- **exportação de relatórios em PDF**;
 - **API REST documentada com Swagger**;
-- **estrutura preparada para evolução de RAG**.
+- **deploy em Azure Web App com pipeline no Azure DevOps**;
+- **base interna RAG ampliada** para respostas contextuais e seguras.
 
 > **Posicionamento do produto:** a IA do Argus **não substitui o brigadista**, não ensina combate ao fogo e não toma decisões críticas em campo. Seu papel é **apoiar documentação, padronização e consulta protocolar**.
 
@@ -36,9 +39,12 @@ A solução foi construída com **Spring Boot**, **Spring AI**, **Ollama** e **O
 ## Links do Projeto
 
 - **Repositório GitHub:** `https://github.com/DudaAraujo14/argus-ia-spring.git`
-- **Swagger UI:** `http://localhost:8080/swagger-ui/index.html`
-- **Health Check:** `http://localhost:8080/api/v1/ia/health`
-- **Status Visual:** `http://localhost:8080/status`
+- **Swagger UI local:** `http://localhost:8080/swagger-ui/index.html`
+- **Health Check local:** `http://localhost:8080/api/v1/ia/health`
+- **Status Visual local:** `http://localhost:8080/status`
+- **Swagger UI publicado:** `https://argus-ia-spring-eddyerg5dkdqbhba.brazilsouth-01.azurewebsites.net/swagger-ui/index.html`
+- **Health Check publicado:** `https://argus-ia-spring-eddyerg5dkdqbhba.brazilsouth-01.azurewebsites.net/api/v1/ia/health`
+- **Status Visual publicado:** `https://argus-ia-spring-eddyerg5dkdqbhba.brazilsouth-01.azurewebsites.net/status`
 - **Vídeo de Demonstração (YouTube não listado):** ``
 
 ---
@@ -55,7 +61,7 @@ A solução foi construída com **Spring Boot**, **Spring AI**, **Ollama** e **O
 - [8. Endpoints da API](#8-endpoints-da-api)
 - [9. Persistência no Oracle Database](#9-persistência-no-oracle-database)
 - [10. Como Executar o Projeto](#10-como-executar-o-projeto)
-- [11. Configuração do Ollama](#11-configuração-do-ollama)
+- [11. Configuração da Groq API](#11-configuração-da-groq-api)
 - [12. Configuração do Oracle](#12-configuração-do-oracle)
 - [13. Prompts e Estratégia de IA](#13-prompts-e-estratégia-de-ia)
 - [14. Base de Conhecimento RAG](#14-base-de-conhecimento-rag)
@@ -76,7 +82,7 @@ O sistema resolve duas necessidades principais:
 1. **Gerar relatórios técnicos padronizados** a partir de dados estruturados de ocorrência.
 2. **Responder dúvidas procedimentais** com base em uma base interna de conhecimento, apoiando brigadistas e coordenadores.
 
-Além disso, os relatórios gerados são **persistidos no Oracle Database** e podem ser **reemitidos posteriormente** por meio de endpoint específico.
+Além disso, os relatórios gerados são **persistidos no Oracle Database**, podem ser **reemitidos posteriormente** e também **exportados em PDF** por meio de endpoints específicos.
 
 ---
 
@@ -90,7 +96,8 @@ O brigadista profissional já possui treinamento para atuação em campo. O prob
 - dificuldade de padronização textual;
 - necessidade de consultar procedimentos rapidamente;
 - necessidade de recuperar relatórios emitidos anteriormente;
-- apoio técnico a brigadistas novatos, voluntários ou equipes em rotação entre biomas.
+- necessidade de exportar documentos em PDF;
+- apoio documental a brigadistas, coordenadores e equipes em rotação entre biomas.
 
 ---
 
@@ -108,7 +115,7 @@ GET /api/v1/ia/health
 
 ### 3.1.1 Página Visual de Status
 
-Exibe uma página visual para apresentação do estado da aplicação, com informações sobre backend, IA local, banco de dados e recursos disponíveis.
+Exibe uma página visual para apresentação do estado da aplicação, com informações sobre backend, IA em nuvem, banco de dados e recursos disponíveis.
 
 ```http
 GET /status
@@ -163,7 +170,7 @@ GET /api/v1/ia/relatorios/{id}/pdf
 
 ### 3.4 Consultar Procedimentos com IA + RAG
 
-Recebe uma pergunta e utiliza a base interna de conhecimento para recuperar contexto. Em seguida, o modelo local via Ollama gera uma resposta orientativa.
+Recebe uma pergunta e utiliza a base interna de conhecimento para recuperar contexto. Em seguida, o contexto é enviado para a **Groq API**, que gera uma resposta orientativa com base nas informações recuperadas.
 
 ```http
 POST /api/v1/ia/consultar
@@ -187,10 +194,10 @@ flowchart LR
     C --> ST[StatusController]
     S --> R1[Gerador Estruturado de Relatório]
     S --> R2[RagService]
+    S --> GQ[GroqService]
     S --> PDF[PdfService]
     R2 --> KB[Base de Conhecimento Interna]
-    R2 --> AI[Spring AI + ChatClient]
-    AI --> O[Ollama - llama3.2:1b]
+    GQ --> AI[Groq API - Llama em Nuvem]
     R1 --> DB[(Oracle Database)]
     S --> DB
     DB --> S
@@ -210,7 +217,7 @@ flowchart TD
     A[Camada de Apresentação] --> B[Camada de Aplicação]
     B --> C[Camada de IA / Orquestração]
     B --> D[Camada de Persistência]
-    C --> E[Modelo Local Ollama]
+    C --> E[Groq API - Llama em Nuvem]
     C --> F[Base de Conhecimento RAG]
     D --> G[(Oracle Database)]
 
@@ -228,9 +235,9 @@ flowchart TD
 
 ### Interpretação rápida da arquitetura
 
-- **Camada de apresentação:** expõe endpoints REST e documentação Swagger.
+- **Camada de apresentação:** expõe endpoints REST, documentação Swagger e página visual de status.
 - **Camada de aplicação:** coordena os casos de uso da solução.
-- **Camada de IA:** integra RAG + Spring AI + Ollama para respostas contextuais.
+- **Camada de IA:** integra RAG + Groq API para respostas contextuais.
 - **Camada de persistência:** grava e recupera relatórios no Oracle Database.
 
 ---
@@ -244,11 +251,12 @@ flowchart TD
 | `IaController` | Exposição dos endpoints de IA |
 | `IaService` | Orquestra geração, consulta, reemissão e exportação em PDF |
 | `RagService` | Recuperação de contexto da base interna |
+| `GroqService` | Integração HTTP com a Groq API |
 | `PdfService` | Geração de PDF a partir de relatório salvo |
 | `RelatorioOcorrenciaRepository` | Persistência e consulta dos relatórios |
 | `RelatorioOcorrencia` | Entidade JPA mapeada no Oracle |
-| `ChatClient` | Integração do Spring AI com o modelo local |
-| `Ollama` | Execução do LLM local `llama3.2:1b` |
+| `Groq API` | Serviço de IA generativa em nuvem |
+| `Llama via Groq` | Modelo utilizado para geração das respostas consultivas |
 
 ---
 
@@ -294,17 +302,17 @@ sequenceDiagram
     participant API as IaController
     participant S as IaService
     participant R as RagService
-    participant AI as Spring AI
-    participant O as Ollama
+    participant G as GroqService
+    participant IA as Groq API
 
     U->>API: POST /api/v1/ia/consultar
     API->>S: consultarProcedimento(pergunta)
     S->>R: buscarContexto(pergunta)
     R-->>S: contexto
-    S->>AI: prompt(contexto + pergunta)
-    AI->>O: chamada ao modelo local
-    O-->>AI: resposta gerada
-    AI-->>S: resposta
+    S->>G: consultar(contexto, pergunta)
+    G->>IA: chamada HTTP com prompt e contexto
+    IA-->>G: resposta gerada pelo modelo
+    G-->>S: resposta
     S-->>API: ConsultaResponse
     API-->>U: resposta + fonte
 ```
@@ -344,8 +352,8 @@ sequenceDiagram
 
 1. O usuário envia uma pergunta.
 2. O `RagService` recupera o contexto da base interna.
-3. O Spring AI monta o prompt com contexto + pergunta.
-4. O Ollama processa localmente.
+3. O `IaService` envia o contexto e a pergunta ao `GroqService`.
+4. O `GroqService` chama a Groq API em nuvem.
 5. O sistema devolve a resposta orientativa.
 
 ---
@@ -356,8 +364,8 @@ sequenceDiagram
 |---|---|
 | ![Java](https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white) | Linguagem principal do backend |
 | ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.6-6DB33F?style=flat-square&logo=springboot&logoColor=white) | Framework da API REST |
-| ![Spring AI](https://img.shields.io/badge/Spring_AI-Framework-6DB33F?style=flat-square&logo=spring&logoColor=white) | Integração com IA generativa |
-| ![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-000000?style=flat-square&logo=ollama&logoColor=white) | Execução local do modelo generativo |
+| ![Groq](https://img.shields.io/badge/Groq_API-IA_em_Nuvem-FF6B00?style=flat-square) | Integração com IA generativa em nuvem |
+| ![Llama](https://img.shields.io/badge/Llama-via_Groq-000000?style=flat-square) | Modelo utilizado para consulta com IA |
 | ![Oracle](https://img.shields.io/badge/Oracle-Database-F80000?style=flat-square&logo=oracle&logoColor=white) | Persistência dos relatórios |
 | ![JPA](https://img.shields.io/badge/Spring_Data_JPA-Persistence-59666C?style=flat-square) | Acesso a dados e mapeamento ORM |
 | ![OpenPDF](https://img.shields.io/badge/OpenPDF-PDF_Generation-CC0000?style=flat-square) | Exportação dos relatórios em PDF |
@@ -365,6 +373,8 @@ sequenceDiagram
 | ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=flat-square&logo=apachemaven&logoColor=white) | Gerenciamento de dependências |
 | ![Git](https://img.shields.io/badge/Git-Versionamento-F05032?style=flat-square&logo=git&logoColor=white) | Controle de versão |
 | ![GitHub](https://img.shields.io/badge/GitHub-Reposit%C3%B3rio-181717?style=flat-square&logo=github&logoColor=white) | Hospedagem do código |
+| ![Azure](https://img.shields.io/badge/Azure-Web_App-0078D4?style=flat-square&logo=microsoftazure&logoColor=white) | Hospedagem em nuvem |
+| ![Azure DevOps](https://img.shields.io/badge/Azure_DevOps-Pipeline-0078D7?style=flat-square&logo=azuredevops&logoColor=white) | Build e deploy automatizados |
 
 ---
 
@@ -393,6 +403,7 @@ src/main/java/br/com/argus/ia
 ├── repository
 │   └── RelatorioOcorrenciaRepository.java
 ├── service
+│   ├── GroqService.java
 │   ├── IaService.java
 │   └── PdfService.java
 └── ArgusIaSpringApplication.java
@@ -423,8 +434,8 @@ src/main/resources
   "localizacao": "Parque Nacional da Chapada dos Veadeiros - GO",
   "tipoVegetacao": "Cerrado com vegetação seca",
   "tamanhoEstimado": "Aproximadamente 12 hectares",
-  "acoesTomadas": "Isolamento da área, combate direto com abafadores e acionamento de equipe de apoio",
-  "recursosUtilizados": "Abafadores, bomba costal, caminhão-pipa e rádio comunicador",
+  "acoesTomadas": "Isolamento preventivo da área, acionamento da Defesa Civil e registro fotográfico da ocorrência",
+  "recursosUtilizados": "Viatura de apoio, rádio comunicador, GPS e kit de primeiros socorros",
   "numeroBrigadistas": 8,
   "nivelRisco": "Alto"
 }
@@ -481,7 +492,7 @@ Download do arquivo relatorio-argus-1.pdf
 GET /status
 ```
 
-A página visual apresenta status da aplicação, backend, IA local, banco de dados e links úteis da API.
+A página visual apresenta status da aplicação, backend, IA em nuvem, banco de dados e links úteis da API.
 
 ### Exemplo — consulta de procedimento
 
@@ -497,8 +508,8 @@ A página visual apresenta status da aplicação, backend, IA local, banco de da
 
 ```json
 {
-  "resposta": "Em caso de ocorrência com vítima, a segurança da equipe e da área deve ser priorizada...",
-  "fonte": "Base interna de procedimentos Argus + Spring AI Ollama"
+  "resposta": "Em caso de ocorrência com vítima, a equipe deve priorizar a segurança da área, acionar imediatamente o serviço médico de emergência e comunicar a Defesa Civil ou órgão responsável. O relatório deve registrar horário, localização, condição observada e providências tomadas.",
+  "fonte": "Base interna de procedimentos Argus + Groq API"
 }
 ```
 
@@ -536,6 +547,7 @@ Essa camada mostra que o projeto não apenas gera a informação, mas também:
 - persiste o resultado;
 - oferece rastreabilidade;
 - permite consulta posterior;
+- permite exportação documental em PDF;
 - aproxima a solução de um cenário real de uso.
 
 ---
@@ -545,10 +557,10 @@ Essa camada mostra que o projeto não apenas gera a informação, mas também:
 ### Pré-requisitos
 
 - Java 17
-- Maven
+- Maven ou Maven Wrapper
 - IntelliJ IDEA Community
-- Ollama instalado
 - Oracle Database acessível
+- Chave da Groq API
 
 ### Passos
 
@@ -559,41 +571,46 @@ git clone https://github.com/DudaAraujo14/argus-ia-spring.git
 # 2. Entrar na pasta do projeto
 cd argus-ia-spring
 
-# 3. Baixar o modelo no Ollama
-ollama pull llama3.2:1b
+# 3. Configurar as variáveis de ambiente no IntelliJ ou no terminal
+# ORACLE_DB_URL, ORACLE_DB_USER, ORACLE_DB_PASSWORD e GROQ_API_KEY
 
-# 4. Rodar o Ollama (caso necessário)
-ollama run llama3.2:1b
-
-# 5. Executar a aplicação Spring Boot
+# 4. Executar a aplicação Spring Boot
 mvn spring-boot:run
 ```
 
 Depois, acessar:
 
-- Swagger: `http://localhost:8080/swagger-ui/index.html`
-- Health: `http://localhost:8080/api/v1/ia/health`
-- Status Visual: `http://localhost:8080/status`
+- Swagger local: `http://localhost:8080/swagger-ui/index.html`
+- Health local: `http://localhost:8080/api/v1/ia/health`
+- Status Visual local: `http://localhost:8080/status`
 
 ---
 
-## 11. Configuração do Ollama
+## 11. Configuração da Groq API
 
-A aplicação utiliza **modelo local**, sem OpenAI e sem necessidade de chave externa.
+A aplicação utiliza **Groq API** como serviço de IA generativa em nuvem.
 
 ### Configuração utilizada
 
 ```properties
-spring.ai.ollama.base-url=http://localhost:11434
-spring.ai.ollama.chat.model=llama3.2:1b
+groq.api.key=${GROQ_API_KEY}
+groq.api.url=https://api.groq.com/openai/v1/chat/completions
+groq.api.model=llama-3.1-8b-instant
+```
+
+### Variável de ambiente necessária
+
+```txt
+GROQ_API_KEY=sua_chave_groq
 ```
 
 ### Justificativa da escolha
 
-- evita custos com API externa;
-- evita exposição de chave;
-- facilita demonstração local;
-- mantém aderência ao requisito de IA generativa real.
+- permite IA generativa em nuvem;
+- funciona em ambiente publicado na Azure;
+- evita dependência de execução local de modelo;
+- mantém a chave protegida por variável de ambiente;
+- permite integração simples por chamada HTTP no backend.
 
 ---
 
@@ -610,12 +627,12 @@ spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+spring.jpa.open-in-view=false
 ```
 
 ### Observação
 
-A senha do banco deve ser mantida em **variável de ambiente**, evitando exposição em repositório público.
+A senha do banco e a chave da Groq devem ser mantidas em **variáveis de ambiente**, evitando exposição em repositório público.
 
 ---
 
@@ -644,7 +661,8 @@ Foi adotado o fluxo:
 
 - recuperar contexto na base interna;
 - injetar o contexto no prompt;
-- gerar resposta com Spring AI + Ollama;
+- enviar a requisição para a Groq API;
+- gerar resposta com modelo Llama via Groq;
 - informar a fonte lógica da resposta.
 
 ---
@@ -658,7 +676,27 @@ Na versão atual, a base de conhecimento é **interna e controlada**, carregada 
 - orientar perguntas frequentes;
 - reduzir respostas genéricas;
 - demonstrar arquitetura do tipo RAG;
+- ampliar a cobertura de respostas do assistente;
 - preparar o sistema para futura evolução com PDFs, embeddings e vector store.
+
+### Temas contemplados atualmente
+
+- ocorrência com vítima;
+- comunicação à Defesa Civil ou órgão responsável;
+- elaboração de relatório técnico;
+- isolamento e segurança da área;
+- ocorrência de incêndio ou foco de fogo;
+- classificação do nível de risco;
+- caracterização da vegetação;
+- registro de recursos utilizados;
+- exportação de relatório em PDF;
+- reemissão de relatório;
+- persistência de dados no Oracle;
+- uso da base interna de conhecimento;
+- uso da IA em nuvem via Groq API;
+- testes da API pelo Swagger;
+- deploy na Azure;
+- ausência de informação suficiente.
 
 ### Evolução prevista
 
@@ -680,7 +718,10 @@ O projeto já contempla:
 - página visual de status da aplicação;
 - persistência real em banco relacional;
 - separação em camadas;
-- uso real de IA generativa local;
+- uso real de IA generativa em nuvem;
+- exportação de relatório em PDF;
+- deploy em Azure Web App;
+- pipeline no Azure DevOps;
 - registro de testes manuais em `AVALIACAO_IA.md`.
 
 Arquivos complementares relevantes:
@@ -691,12 +732,41 @@ Arquivos complementares relevantes:
 
 ---
 
+## 16. Limitações Declaradas
+
+- A IA não substitui o julgamento técnico do brigadista.
+- A IA não substitui treinamento profissional.
+- A IA não substitui protocolos oficiais completos.
+- A IA não deve tomar decisões críticas em campo.
+- A IA não ensina técnicas diretas de combate ao fogo.
+- A IA responde apenas com base no contexto recuperado.
+- A IA pode informar ausência de dados quando a base não possuir informação suficiente.
+- A API externa pode sofrer indisponibilidade, limite de uso ou falha de autenticação.
+- A chave da Groq deve ser mantida fora do código e configurada via variável de ambiente.
+
+---
+
+## 17. Evoluções Futuras
+
+- integração com PDFs oficiais;
+- criação de embeddings;
+- uso de vector store;
+- painel administrativo para consulta de relatórios;
+- integração com aplicativo mobile;
+- autenticação e autorização;
+- upload de evidências da ocorrência;
+- dashboards de ocorrências por região, bioma e risco;
+- melhoria visual da exportação em PDF;
+- ampliação da base RAG com documentos oficiais.
+
+---
+
 ## 18. Critérios Atendidos na Entrega
 
 ### Aderência ao entregável da disciplina
 
 - solução funcional com **IA Generativa**;
-- integração com **modelo generativo real**;
+- integração com **modelo generativo real em nuvem**;
 - uso de **API REST**;
 - persistência em **banco de dados Oracle**;
 - documentação de arquitetura;
@@ -704,11 +774,14 @@ Arquivos complementares relevantes:
 - casos de uso bem definidos;
 - tratamento de erros e validação;
 - demonstração prática via Swagger e página visual de status;
+- exportação documental em PDF;
+- deploy em Azure Web App;
+- pipeline no Azure DevOps;
 - projeto alinhado ao problema real da Global Solution.
 
 ### Destaques do projeto
 
-- IA executando localmente via Ollama;
+- IA generativa em nuvem via Groq API;
 - reemissão de relatório salvo via `GET`;
 - exportação de relatório salvo em PDF;
 - arquitetura organizada e compreensível para banca técnica;
@@ -738,7 +811,7 @@ O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
 4. reemissão do relatório salvo;
 5. exportação do relatório em PDF;
 6. consulta de procedimento com IA + RAG;
-7. explicação do uso do Oracle e do Ollama.
+7. explicação do uso do Oracle, da Groq API, da Azure e do pipeline.
 
 ---
 
@@ -755,9 +828,11 @@ O vídeo de apresentação deve demonstrar, preferencialmente, nesta ordem:
 - [x] Reemissão de relatório por `GET`
 - [x] Exportação de relatório em PDF
 - [x] Página visual de status da aplicação
-- [x] Consulta procedimental com Spring AI + Ollama
-- [x] Estrutura RAG inicial
+- [x] Consulta procedimental com Groq API + RAG
+- [x] Estrutura RAG ampliada
 - [x] Tratamento de erros
+- [x] Deploy em Azure Web App
+- [x] Pipeline no Azure DevOps
 - [x] Documentação técnica
 
 ---
