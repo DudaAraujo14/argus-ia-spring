@@ -9,8 +9,6 @@ import br.com.argus.ia.rag.RagService;
 import br.com.argus.ia.repository.RelatorioOcorrenciaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,18 +19,18 @@ public class IaService {
     private static final Logger logger = LoggerFactory.getLogger(IaService.class);
 
     private final RagService ragService;
-    private final ChatClient chatClient;
+    private final br.com.argus.ia.service.GroqService groqService;
     private final RelatorioOcorrenciaRepository relatorioRepository;
     private final br.com.argus.ia.service.PdfService pdfService;
 
     public IaService(
             RagService ragService,
-            ChatClient.Builder chatClientBuilder,
+            br.com.argus.ia.service.GroqService groqService,
             RelatorioOcorrenciaRepository relatorioRepository,
             br.com.argus.ia.service.PdfService pdfService
     ) {
         this.ragService = ragService;
-        this.chatClient = chatClientBuilder.build();
+        this.groqService = groqService;
         this.relatorioRepository = relatorioRepository;
         this.pdfService = pdfService;
     }
@@ -80,50 +78,15 @@ public class IaService {
         String contexto = ragService.buscarContexto(pergunta);
 
         try {
-            String resposta = chatClient
-                    .prompt()
-                    .options(ChatOptions.builder()
-                            .temperature(0.1)
-                            .maxTokens(350))
-                    .system("""
-                            Você é um assistente de procedimentos do sistema Argus,
-                            voltado para apoio documental a brigadistas e coordenadores.
-
-                            Use apenas o contexto fornecido para responder.
-
-                            Regras obrigatórias:
-                            - Não invente protocolos.
-                            - Não invente órgãos, normas, fontes ou referências.
-                            - Não ensine técnicas de combate ao fogo.
-                            - Não substitua treinamento profissional.
-                            - Não substitua decisão operacional em campo.
-                            - Responda em português do Brasil.
-                            - Seja objetivo, técnico e seguro.
-                            - Não use markdown.
-                            - Não use asteriscos.
-                            """)
-                    .user("""
-                            Contexto recuperado da base de conhecimento:
-
-                            %s
-
-                            Pergunta do usuário:
-
-                            %s
-
-                            Responda apenas com base no contexto recuperado.
-                            Se o contexto indicar ausência de informação suficiente, informe isso claramente.
-                            """.formatted(contexto, pergunta))
-                    .call()
-                    .content();
+            String resposta = groqService.consultar(contexto, pergunta);
 
             return new ConsultaResponse(
                     limparResposta(resposta),
-                    "Base interna de procedimentos Argus + Spring AI Gemini"
+                    "Base interna de procedimentos Argus + Groq API"
             );
 
         } catch (Exception exception) {
-            logger.error("Erro ao consultar o serviço de IA Gemini.", exception);
+            logger.error("Erro ao consultar o serviço de IA Groq.", exception);
 
             String respostaFallback = """
                     Resposta do Assistente IA Argus:

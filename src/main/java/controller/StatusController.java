@@ -244,7 +244,7 @@ public class StatusController {
 
                             <div class="metric">
                                 <div class="metric-label">IA em Nuvem</div>
-                                <div class="metric-value">Google Gemini</div>
+                                <div class="metric-value">Groq API</div>
                             </div>
 
                             <div class="metric">
@@ -261,7 +261,7 @@ public class StatusController {
 
                             <div class="row">
                                 <span class="label">Módulo</span>
-                                <span class="value">Spring AI + Gemini + Oracle</span>
+                                <span class="value">Groq API + Oracle + RAG</span>
                             </div>
 
                             <div class="row">
